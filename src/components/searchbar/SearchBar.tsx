@@ -16,7 +16,6 @@ declare global {
   interface Document {
     __fjalorshqip__: string;
   }
-  const umami: any;
 }
 
 const random_string = () => {
