@@ -18,7 +18,7 @@ const Favorites = () => {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {favs.map(f => (
             <li key={f.slug} style={{ marginBottom: 8 }}>
-              <Link to={`/f/${f.slug}`}>{f.term}</Link>
+              <Link to={`/f/${f.slug}`} viewTransition>{f.term}</Link>
             </li>
           ))}
         </ul>

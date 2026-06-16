@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './SearchBar.module.scss';
 import { AnimatePresence, motion } from 'framer-motion';
 import classNames from 'classnames';
@@ -35,24 +36,23 @@ const push_query = async (query: string) => {
   }
 };
 
+const MotionLink = motion(Link);
+
 const SearchBar = () => {
   const [query, setQuery] = useState(() => {
     const savedQuery = localStorage.getItem('fj_last_search_query');
     return savedQuery || '';
   });
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
-  const [suggestPos, setSuggestPos] = useState({ top: 0, left: 0, width: 0 });
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const hasFocused = useRef(false);
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const menuBtnRef = useRef<HTMLSpanElement>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout>>();
   const { entry, crossRef, setCrossRef } = useEntry();
   const [fav, setFav] = useState(() => entry ? isFavorite(entry.slug) : false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (inputRef.current && !hasFocused.current) {
@@ -67,39 +67,14 @@ const SearchBar = () => {
     }
   }, [query]);
 
-  const openMenu = () => {
-    clearTimeout(closeTimer.current);
-    setMenuOpen(true);
-  };
-
-  const closeMenu = () => {
-    clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setMenuOpen(false), 200);
-  };
-
-  const toggleMenu = () => {
-    clearTimeout(closeTimer.current);
-    setMenuOpen(v => !v);
-  };
-
   useEffect(() => {
     setFav(entry ? isFavorite(entry.slug) : false);
   }, [entry]);
 
+  // Reset focus index when suggestions list updates
   useEffect(() => {
-    if (!menuOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (
-        menuRef.current && !menuRef.current.contains(e.target as Node) &&
-        menuBtnRef.current && !menuBtnRef.current.contains(e.target as Node)
-      ) {
-        clearTimeout(closeTimer.current);
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [menuOpen]);
+    setFocusedIndex(-1);
+  }, [suggestions]);
 
   const focusInput = () => {
     inputRef?.current?.focus();
@@ -122,13 +97,38 @@ const SearchBar = () => {
     return () => clearTimeout(timerRef.current);
   }, [query, doSearch]);
 
-  useEffect(() => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (suggestions.length === 0) return;
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    setSuggestPos({ top: rect.bottom, left: rect.left, width: rect.width });
-  }, [suggestions]);
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setFocusedIndex(prev => (prev + 1) % suggestions.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setFocusedIndex(prev => (prev - 1 + suggestions.length) % suggestions.length);
+    } else if (e.key === 'Enter') {
+      if (focusedIndex >= 0 && focusedIndex < suggestions.length) {
+        e.preventDefault();
+        const selected = suggestions[focusedIndex];
+        navigate(`/f/${selected.slug}`, { viewTransition: true });
+        setSuggestions([]);
+        setQuery('');
+      }
+    } else if (e.key === 'Escape') {
+      setSuggestions([]);
+    }
+  };
+
+  const closePopover = () => {
+    try {
+      const el = document.getElementById('search-menu-popover');
+      if (el && 'hidePopover' in el) {
+        (el as any).hidePopover();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className={styles.searchContainer} ref={containerRef}>
@@ -145,6 +145,12 @@ const SearchBar = () => {
           ref={inputRef}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={suggestions.length > 0}
+          aria-controls="search-suggestions"
+          aria-haspopup="listbox"
+          onKeyDown={handleKeyDown}
         />
         {query && (
           <span className={styles.clearButton} onClick={() => setQuery('')}>
@@ -154,29 +160,34 @@ const SearchBar = () => {
             </svg>
           </span>
         )}
-        <span
-          ref={menuBtnRef}
+        <button
           className={styles.menuButton}
-          onMouseEnter={openMenu}
-          onMouseLeave={closeMenu}
-          onClick={toggleMenu}
+          {...{ popovertarget: "search-menu-popover" }}
           aria-label="Më shumë opsione"
+          type="button"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
           </svg>
-        </span>
+        </button>
       </div>
       <div
+        id="search-suggestions"
+        role="listbox"
+        aria-label="Sugjerimet e kërkimit"
         className={styles.suggestions}
-        style={suggestions.length > 0 ? { position: 'fixed', top: suggestPos.top, left: suggestPos.left, width: suggestPos.width } : undefined}
       >
         <AnimatePresence>
-          {suggestions.map((suggestion) => (
-            <motion.a
+          {suggestions.map((suggestion, index) => (
+            <MotionLink
               key={`${suggestion.slug}-${suggestion.attributes.join('-')}`}
-              href={`/f/${suggestion.slug}`}
-              className={styles.suggestion}
+              to={`/f/${suggestion.slug}`}
+              viewTransition
+              className={classNames(styles.suggestion, {
+                [styles.focused]: index === focusedIndex
+              })}
+              role="option"
+              aria-selected={index === focusedIndex}
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
@@ -184,47 +195,50 @@ const SearchBar = () => {
             >
               <span className={styles.term}>{suggestion.term}</span>
               <span className={styles.attrs}>{expandAttrs(suggestion.attributes)}</span>
-            </motion.a>
+            </MotionLink>
           ))}
         </AnimatePresence>
       </div>
-      {menuOpen && (
-        <div className={styles.menu} ref={menuRef} onMouseEnter={openMenu} onMouseLeave={closeMenu}>
-          <button
-            className={styles.menuItem}
-            onClick={() => {
-              if (!entry) return;
-              const now = toggleFavorite(entry.slug, entry.term);
-              setFav(now);
-            }}
-          >
-            {fav
-              ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
-            {fav ? 'Të preferuar' : 'Shto te të preferuarat'}
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              setMenuOpen(false);
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
-            Kopjo linkun
-          </button>
-          <label className={styles.menuToggle}>
-            <span className={classNames(styles.toggleTrack, { [styles.on]: crossRef })} onClick={() => setCrossRef(!crossRef)}>
-              <span className={styles.toggleThumb} />
-            </span>
-            <span>Referencat e kryqëzuara</span>
-            <input type="checkbox" checked={crossRef} onChange={e => setCrossRef(e.target.checked)} />
-          </label>
-        </div>
-      )}
+      <div
+        id="search-menu-popover"
+        {...{ popover: "auto" }}
+        className={styles.menu}
+      >
+        <button
+          className={styles.menuItem}
+          onClick={() => {
+            if (!entry) return;
+            const now = toggleFavorite(entry.slug, entry.term);
+            setFav(now);
+            closePopover();
+          }}
+        >
+          {fav
+            ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
+          {fav ? 'Të preferuar' : 'Shto te të preferuarat'}
+        </button>
+        <button
+          className={styles.menuItem}
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            closePopover();
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          Kopjo linkun
+        </button>
+        <label className={styles.menuToggle}>
+          <span className={classNames(styles.toggleTrack, { [styles.on]: crossRef })} onClick={() => setCrossRef(!crossRef)}>
+            <span className={styles.toggleThumb} />
+          </span>
+          <span>Referencat e kryqëzuara</span>
+          <input type="checkbox" checked={crossRef} onChange={e => setCrossRef(e.target.checked)} />
+        </label>
+      </div>
     </div>
   );
 };

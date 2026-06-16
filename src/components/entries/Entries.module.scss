@@ -11,6 +11,7 @@
   scroll-margin-top: 80px;
   font-family: 'Lora', Georgia, serif;
   line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .title {
@@ -23,14 +24,14 @@
 
 .highlight {
   background: #fef08a;
-  color: inherit;
+  color: #1a1205;
   padding: 0 2px;
   border-radius: 2px;
 }
 
 .highlight.crossref {
   background: #fef08a;
-  color: inherit;
+  color: #1a1205;
   padding: 0 2px;
   border-radius: 2px;
 }
@@ -55,10 +56,17 @@
 }
 
 .crossref {
+  display: inline-block;
+  white-space: nowrap;
+  animation: wordIn 100ms ease-out backwards;
   color: inherit;
   text-decoration: underline;
   text-decoration-style: solid;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   cursor: pointer;
+}
+
+.crossref:not(:last-child) {
+  margin-right: 0.25em;
 }

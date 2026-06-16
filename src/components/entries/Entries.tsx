@@ -73,6 +73,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
               <Link
                 key={wi}
                 to={`/f/${matched}`}
+                viewTransition
                 className={`${styles.crossref} ${wi < 5 ? styles.highlight : ''}`}
                 style={{ animationDelay: `${delay + wi * stagger}ms` }}
               >

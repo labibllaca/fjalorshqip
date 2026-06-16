@@ -26,10 +26,8 @@ const WordPage = () => {
 
   useEffect(() => {
     if (!slug) { setLoading(false); return; }
-    if (entries.length > 0) {
-      setLoading(false);
-      return;
-    }
+    setLoading(true);
+    setEntries([]);
     fetch(`/api/word/${encodeURIComponent(slug)}`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {

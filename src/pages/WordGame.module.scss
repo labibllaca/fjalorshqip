@@ -48,6 +48,7 @@
 .def {
   font-size: 1em;
   margin: 0 0 8px;
+  text-wrap: pretty;
 }
 
 .num {
@@ -81,6 +82,8 @@
   border: 1px solid var(--border, #d1d5db);
   border-radius: 8px;
   outline: none;
+  background: var(--card-bg, #fff);
+  color: var(--text, #111827);
 }
 
 .input:focus {

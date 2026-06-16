@@ -23,4 +23,5 @@ Te gjitha komandat mund te thirren nga baza e projektit permes terminalit:
 | `npm install`             | Shkarkon libraritë                               |
 | `npm run dev`             | Leshon serverin në `localhost:4321`              |
 | `npm run build`           | Ndërton faqen në folderin `./dist/`              |
+| 'npm rebuild better-sqlite3' | |
 

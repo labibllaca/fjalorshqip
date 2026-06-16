@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { registerWebMcpTools } from './lib/webmcp';
+
+registerWebMcpTools();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

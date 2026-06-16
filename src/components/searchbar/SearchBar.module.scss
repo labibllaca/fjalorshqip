@@ -2,6 +2,7 @@
   position: relative;
 
   .searchbar {
+    anchor-name: --search-bar-anchor;
     display: flex;
     background: white;
     width: 100%;
@@ -64,17 +65,31 @@
   }
 
   .menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    z-index: 100;
     min-width: 220px;
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
-    margin-top: 4px;
     box-shadow: 0 4px 16px rgba(0,0,0,.12);
     overflow: hidden;
+    padding: 0;
+
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 100;
+    margin-top: 4px;
+
+    &:popover-open {
+      display: block;
+      position: fixed;
+      position-anchor: --search-bar-anchor;
+      top: anchor(bottom);
+      right: anchor(right);
+      left: auto;
+      bottom: auto;
+      margin: 4px 0 0 0;
+      inset: auto;
+    }
 
     .menuItem {
       display: flex;
@@ -164,6 +179,16 @@
     overflow: hidden;
     background: white;
 
+    @supports (anchor-name: --test) {
+      position: fixed;
+      position-anchor: --search-bar-anchor;
+      top: anchor(bottom);
+      left: anchor(left);
+      width: anchor-size(width);
+      right: auto;
+      bottom: auto;
+    }
+
     .suggestion {
       display: flex;
       align-items: center;
@@ -179,7 +204,7 @@
         border-bottom: none;
       }
 
-      &:hover {
+      &:hover, &.focused {
         background-color: #f5f5f5;
       }
 

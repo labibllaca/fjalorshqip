@@ -24,7 +24,7 @@ const Home = () => {
           <ul>
             {favorites.map(f => (
               <li key={f.slug}>
-                <Link to={`/f/${f.slug}`}>{f.term}</Link>
+                <Link to={`/f/${f.slug}`} viewTransition>{f.term}</Link>
               </li>
             ))}
           </ul>
@@ -36,7 +36,7 @@ const Home = () => {
           <ul>
             {history.slice(0, 10).map(h => (
               <li key={h.slug}>
-                <Link to={`/f/${h.slug}`}>{h.term}</Link>
+                <Link to={`/f/${h.slug}`} viewTransition>{h.term}</Link>
               </li>
             ))}
           </ul>
