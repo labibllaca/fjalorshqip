@@ -37,7 +37,6 @@ const Entries = ({ entries = [] }: EntriesProps) => {
   const { crossRef } = useEntry();
   const [slugSet, setSlugSet] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
-  const hasFocused = useRef(false);
 
   useEffect(() => {
     getSlugSet().then((data) => {
