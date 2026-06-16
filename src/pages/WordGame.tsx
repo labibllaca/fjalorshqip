@@ -33,6 +33,7 @@ const WordGame = () => {
   const [wrongCount, setWrongCount] = useState(0);
   const [phase, setPhase] = useState<'playing' | 'correct' | 'revealed'>('playing');
   const [hint, setHint] = useState(false);
+  const [shuffledTerm, setShuffledTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [done, setDone] = useState(false);
   const [shake, setShake] = useState(false);
@@ -48,6 +49,7 @@ const WordGame = () => {
     setWrongCount(0);
     setPhase('playing');
     setHint(false);
+    setShuffledTerm('');
     setDone(false);
     fetch('/api/random?n=20')
       .then(r => r.json())
@@ -80,11 +82,12 @@ const WordGame = () => {
       setShake(true);
       clearTimeout(wrongTimer.current);
       wrongTimer.current = setTimeout(() => setShake(false), 500);
-      if (wc >= MAX_WRONG) setPhase('revealed');
+      if (wc >= MAX_WRONG) { setPhase('revealed'); if (current) setShuffledTerm(shuffle(current.term)); }
     }
   };
 
   const reveal = () => {
+    if (current) setShuffledTerm(shuffle(current.term));
     setPhase('revealed');
   };
 
@@ -98,13 +101,14 @@ const WordGame = () => {
     setWrongCount(0);
     setPhase('playing');
     setHint(false);
+    setShuffledTerm('');
     setShake(false);
   };
 
   const masked = (() => {
     if (!current) return '';
     const t = current.term;
-    return t[0] + '_'.repeat(t.length - 1);
+    return t[0] + '_'.repeat(t.length - 1) + ` (${t.length})`;
   })();
 
   if (loading) {
@@ -146,13 +150,15 @@ const WordGame = () => {
           <span className={styles.progress}>{idx + 1} / {words.length}</span>
         </div>
 
-        <p className={styles.masked}>{masked}</p>
+        <p className={styles.masked}>
+          {phase === 'correct' ? current.term : phase === 'revealed' ? shuffledTerm : masked}
+        </p>
 
         <div className={styles.defs}>
           {current.definitions.map((def, i) => (
             <p key={i} className={styles.def}>
               {current.definitions.length > 1 && <span className={styles.num}>{i + 1}.</span>}
-              {blurDef(def, current.term).map((part, j) =>
+              {(phase === 'correct' ? [def] : blurDef(def, current.term)).map((part, j) =>
                 typeof part === 'string' ? (
                   <span key={j}>{part}</span>
                 ) : (
@@ -211,7 +217,7 @@ const WordGame = () => {
 
         {phase === 'revealed' && (
           <div className={styles.feedback}>
-            <p className={styles.wrong}>«{current.term}»</p>
+            <p className={styles.wrong}>{shuffledTerm}</p>
             <button className={styles.btn} onClick={next}>
               {idx + 1 >= words.length ? 'Shiko rezultatin' : 'Fjala tjetër'}
             </button>

@@ -58,7 +58,7 @@ const WordOfTheDay = () => {
         )}
         <div className="wotd-defs">
           {entry.definitions.map((def, i) => (
-            <p key={i} className="wotd-def">
+            <p key={i} id={`def-0-${i}`} className="wotd-def">
               {entry.definitions.length > 1 && <span className="wotd-num">{i + 1}.</span>}
               {def}
             </p>
