@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { Entry } from '../../lib/dictionary';
 import { expandAttrs } from '../../lib/abbrev';
@@ -37,6 +37,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
   const { crossRef } = useEntry();
   const [slugSet, setSlugSet] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const hasFocused = useRef(false);
 
   useEffect(() => {
     getSlugSet().then((data) => {
@@ -44,8 +45,6 @@ const Entries = ({ entries = [] }: EntriesProps) => {
       setLoading(false);
     });
   }, []);
-
-  
 
   const slugKey = entries[0]?.slug || 'empty';
 
@@ -72,27 +71,14 @@ const Entries = ({ entries = [] }: EntriesProps) => {
           const matched = matchSlug(slug, slugSet);
           if (matched && crossRef) {
             return (
-              <a
+              <Link
                 key={wi}
-                href="#"
+                to={`/f/${matched}`}
                 className={`${styles.crossref} ${wi < 5 ? styles.highlight : ''}`}
                 style={{ animationDelay: `${delay + wi * stagger}ms` }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  const entryIndex = entries.findIndex(entry => entry.term === word);
-                  if (entryIndex >= 0) {
-                    const targetId = `def-${entryIndex}-0`;
-                    const el = document.getElementById(targetId);
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth' });
-                      el.style.animation = 'pulse 0.8s ease-in-out 3.75';
-                      setTimeout(() => el.style.animation = '', 3000);
-                    }
-                  }
-                }}
               >
                 {word}
-              </a>
+              </Link>
             );
           }
           return (
