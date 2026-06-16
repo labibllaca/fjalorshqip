@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { Entry } from '../lib/dictionary';
 import SearchBar from '../components/searchbar/SearchBar';
 import styles from './WordGame.module.scss';
@@ -37,6 +37,8 @@ const WordGame = () => {
   const [loading, setLoading] = useState(true);
   const [done, setDone] = useState(false);
   const [shake, setShake] = useState(false);
+  const [revealedPositions, setRevealedPositions] = useState<Set<number>>(new Set());
+  const [animatingPositions, setAnimatingPositions] = useState<Set<number>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
   const wrongTimer = useRef<ReturnType<typeof setTimeout>>();
 
@@ -51,6 +53,8 @@ const WordGame = () => {
     setHint(false);
     setShuffledTerm('');
     setDone(false);
+    setRevealedPositions(new Set());
+    setAnimatingPositions(new Set());
     fetch('/api/random?n=20')
       .then(r => r.json())
       .then((data: Entry[]) => {
@@ -86,6 +90,32 @@ const WordGame = () => {
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setGuess(value);
+    
+    if (!current || phase !== 'playing') return;
+    
+    const term = current.term.toLowerCase();
+    const newRevealed = new Set(revealedPositions);
+    const newAnimating = new Set<number>();
+    
+    for (const char of value.toLowerCase()) {
+      for (let i = 0; i < term.length; i++) {
+        if (term[i] === char && !revealedPositions.has(i)) {
+          newRevealed.add(i);
+          newAnimating.add(i);
+        }
+      }
+    }
+    
+    if (newAnimating.size > 0) {
+      setAnimatingPositions(newAnimating);
+      setTimeout(() => setAnimatingPositions(new Set()), 300);
+    }
+    setRevealedPositions(newRevealed);
+  };
+
   const reveal = () => {
     if (current) setShuffledTerm(shuffle(current.term));
     setPhase('revealed');
@@ -103,13 +133,18 @@ const WordGame = () => {
     setHint(false);
     setShuffledTerm('');
     setShake(false);
+    setRevealedPositions(new Set());
+    setAnimatingPositions(new Set());
   };
 
-  const masked = (() => {
+  const masked = useMemo(() => {
     if (!current) return '';
     const t = current.term;
-    return t[0] + '_'.repeat(t.length - 1) + ` (${t.length})`;
-  })();
+    return t.split('').map((char, i) => {
+      if (i === 0 || revealedPositions.has(i)) return char;
+      return '_';
+    }).join('') + ` (${t.length})`;
+  }, [current, revealedPositions]);
 
   if (loading) {
     return (
@@ -151,7 +186,18 @@ const WordGame = () => {
         </div>
 
         <p className={styles.masked}>
-          {phase === 'correct' ? current.term : phase === 'revealed' ? shuffledTerm : masked}
+          {phase === 'correct' ? current.term : phase === 'revealed' ? shuffledTerm : (
+            <>
+              {masked.split('').map((char, i) => (
+                <span
+                  key={i}
+                  className={`${styles.maskedChar} ${animatingPositions.has(i) ? styles.revealAnim : ''}`}
+                >
+                  {char}
+                </span>
+              ))}
+            </>
+          )}
         </p>
 
         <div className={styles.defs}>
@@ -180,7 +226,7 @@ const WordGame = () => {
                 ref={inputRef}
                 className={`${styles.input} ${wrongCount > 0 ? styles.wrongInput : ''}`}
                 value={guess}
-                onChange={e => setGuess(e.target.value)}
+                onChange={handleInputChange}
                 onKeyDown={e => { if (e.key === 'Enter') checkGuess(); }}
                 placeholder="Shkruaj përgjigjen…"
                 autoFocus

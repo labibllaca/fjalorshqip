@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { Entry } from '../../lib/dictionary';
 import { expandAttrs } from '../../lib/abbrev';
+import { getSlugSet, wordToSlug, matchSlug } from '../../lib/crossref';
+import { useEntry } from '../../lib/entry-context';
 import styles from './Entries.module.scss';
 
 interface EntriesProps {
@@ -30,6 +34,13 @@ const AnimatedDef = ({ text, delay }: { text: string; delay: number }) => {
 };
 
 const Entries = ({ entries = [] }: EntriesProps) => {
+  const { crossRef } = useEntry();
+  const [slugSet, setSlugSet] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    getSlugSet().then(setSlugSet);
+  }, []);
+
   const slugKey = entries[0]?.slug || 'empty';
 
   let cumDelay = 0;
@@ -43,6 +54,46 @@ const Entries = ({ entries = [] }: EntriesProps) => {
     }),
   );
 
+  function renderDefWithCrossRef(text: string, delay: number) {
+    if (!crossRef || slugSet.size === 0) {
+      return <AnimatedDef text={text} delay={delay} />;
+    }
+
+    const words = text.split(/(\s+)/);
+    const stagger = 100;
+
+    return (
+      <span className={styles.line}>
+        {words.map((word, wi) => {
+          if (!word.trim()) return <span key={wi}>{word}</span>;
+          const slug = wordToSlug(word);
+          const matched = matchSlug(slug, slugSet);
+          if (matched) {
+            return (
+              <Link
+                key={wi}
+                to={`/f/${matched}`}
+                className={styles.crossref}
+                style={{ animationDelay: `${delay + wi * stagger}ms` }}
+              >
+                {word}
+              </Link>
+            );
+          }
+          return (
+            <span
+              key={wi}
+              className={styles.word}
+              style={{ animationDelay: `${delay + wi * stagger}ms` }}
+            >
+              {word}
+            </span>
+          );
+        })}
+      </span>
+    );
+  }
+
   return (
     <div className={styles.entries} key={slugKey}>
       {entries.map((entry, entryIdx) => (
@@ -54,7 +105,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
             const num = entry.definitions.length > 1 ? `${defIdx + 1}. ` : '';
             return (
               <div key={`def-${defIdx}`} id={tocId(entryIdx, defIdx)} className={styles.definition}>
-                <AnimatedDef text={`${num}${definition}`} delay={defDelays[entryIdx][defIdx]} />
+                {renderDefWithCrossRef(`${num}${definition}`, defDelays[entryIdx][defIdx])}
               </div>
             );
           })}
