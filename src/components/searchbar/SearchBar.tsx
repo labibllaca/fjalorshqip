@@ -46,6 +46,7 @@ const SearchBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const hasFocused = useRef(false);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -55,8 +56,9 @@ const SearchBar = () => {
   const [fav, setFav] = useState(() => entry ? isFavorite(entry.slug) : false);
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef.current && !hasFocused.current) {
       inputRef.current.focus();
+      hasFocused.current = true;
     }
   }, []);
 
