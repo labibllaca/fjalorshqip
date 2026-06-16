@@ -59,10 +59,6 @@ const Entries = ({ entries = [] }: EntriesProps) => {
   );
 
   function renderDefWithCrossRef(text: string, delay: number) {
-    if (!crossRef || slugSet.size === 0 || loading) {
-      return <AnimatedDef text={text} delay={delay} />;
-    }
-
     const words = text.split(/(\s+)/);
     const stagger = 100;
 
@@ -72,7 +68,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
           if (!word.trim()) return <span key={wi}>{word}</span>;
           const slug = wordToSlug(word);
           const matched = matchSlug(slug, slugSet);
-          if (matched) {
+          if (matched && crossRef) {
             return (
               <Link
                 key={wi}
