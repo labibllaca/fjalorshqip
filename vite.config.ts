@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     host: 'localhost',
     hmr: { protocol: 'ws', host: 'localhost' },
+    allowedHosts: ['fjalor.bashk.eu']
     proxy: {
       '/api': 'http://localhost:3000',
     },

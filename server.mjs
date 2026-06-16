@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT = parseInt(process.env.PORT || '5187', 10);
 
 const STOP_WORDS = new Set([
   'i', 'e', 'te', 'se', 'ne', 'me', 'nga', 'per', 'pa', 'mbi', 'nen',
