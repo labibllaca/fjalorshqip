@@ -1,0 +1,197 @@
+.searchContainer {
+  position: relative;
+
+  .searchbar {
+    display: flex;
+    background: white;
+    width: 100%;
+    align-items: center;
+    padding: 10px 5px 10px 10px;
+    transition: all 0.2s ease;
+    border: 1px solid grey;
+    border-radius: 15px;
+    box-sizing: border-box;
+    cursor: text;
+
+    &.hasSuggestions {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    &:has(input:focus) {
+      border-color: #d53;
+    }
+
+    input {
+      flex-grow: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+    }
+
+    .clearButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      cursor: pointer;
+      color: var(--muted);
+      border-radius: 4px;
+      transition: color .15s, background .15s;
+      flex-shrink: 0;
+
+      &:hover {
+        color: var(--accent);
+        background: rgba(0,0,0,.04);
+      }
+    }
+  }
+
+  .menuButton {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--muted);
+    border-radius: 4px;
+    transition: color .15s, background .15s;
+    flex-shrink: 0;
+
+    &:hover {
+      color: var(--accent);
+      background: rgba(0,0,0,.04);
+    }
+  }
+
+  .menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 100;
+    min-width: 220px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 4px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    overflow: hidden;
+
+    .menuItem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      text-align: left;
+      border: none;
+      background: none;
+      font: inherit;
+      font-size: 0.9em;
+      cursor: pointer;
+      color: var(--text);
+      transition: background .15s;
+
+      svg {
+        flex-shrink: 0;
+        color: var(--muted);
+      }
+
+      &:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    .menuToggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 0.9em;
+      cursor: pointer;
+      color: var(--text);
+      transition: background .15s;
+
+      &:hover {
+        background: #f5f5f5;
+      }
+
+      .toggleTrack {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        background: #ccc;
+        border-radius: 10px;
+        transition: background .2s;
+        flex-shrink: 0;
+
+        &.on {
+          background: var(--accent);
+        }
+
+        .toggleThumb {
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 16px;
+          height: 16px;
+          background: white;
+          border-radius: 50%;
+          transition: transform .2s;
+
+          .on & {
+            transform: translateX(16px);
+          }
+        }
+      }
+
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid grey;
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    overflow: hidden;
+    background: white;
+
+    .suggestion {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #d53;
+      background-color: white;
+      transition: background-color 0.15s ease;
+      padding: 8px 10px;
+      text-decoration: none;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
+      .term {
+        font-weight: 500;
+        color: #222;
+      }
+
+      .attrs {
+        font-size: 0.8em;
+        color: #888;
+      }
+    }
+  }
+}

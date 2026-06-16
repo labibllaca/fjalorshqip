@@ -1,0 +1,41 @@
+{
+  "name": "page",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
+    "start": "node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
+    "dev:server": "node src/scripts/copy-api.mjs && node server.mjs",
+    "prebuild": "NODE_ENV=production npx tsx src/scripts/build-db.ts",
+    "build": "node src/scripts/build.mjs",
+    "preview": "node server.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "classnames": "^2.5.1",
+    "express": "^5.2.1",
+    "framer-motion": "^10.18.0",
+    "leven": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.17.0",
+    "sass": "^1.70.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.6",
+    "@types/lodash": "^4.14.202",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^10.0.3",
+    "dotenv": "^16.3.2",
+    "lodash": "^4.17.21",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.16",
+    "vitest": "^3.2.6"
+  }
+}
