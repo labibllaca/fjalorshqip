@@ -45,6 +45,8 @@ const Entries = ({ entries = [] }: EntriesProps) => {
     });
   }, []);
 
+  
+
   const slugKey = entries[0]?.slug || 'empty';
 
   let cumDelay = 0;
@@ -70,14 +72,27 @@ const Entries = ({ entries = [] }: EntriesProps) => {
           const matched = matchSlug(slug, slugSet);
           if (matched && crossRef) {
             return (
-              <Link
+              <a
                 key={wi}
-                to={`/f/${matched}`}
+                href="#"
                 className={`${styles.crossref} ${wi < 5 ? styles.highlight : ''}`}
                 style={{ animationDelay: `${delay + wi * stagger}ms` }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const entryIndex = entries.findIndex(entry => entry.term === word);
+                  if (entryIndex >= 0) {
+                    const targetId = `def-${entryIndex}-0`;
+                    const el = document.getElementById(targetId);
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                      el.style.animation = 'pulse 0.8s ease-in-out 3.75';
+                      setTimeout(() => el.style.animation = '', 3000);
+                    }
+                  }
+                }}
               >
                 {word}
-              </Link>
+              </a>
             );
           }
           return (
