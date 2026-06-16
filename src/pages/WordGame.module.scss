@@ -19,6 +19,18 @@
   color: var(--muted, #6b7280);
 }
 
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .score, .progress {
+    display: block;
+    width: 100%;
+  }
+}
+
 .masked {
   font-size: 2em;
   font-weight: 700;
