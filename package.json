@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
-    "start": "node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
-    "dev:server": "node src/scripts/copy-api.mjs && node server.mjs",
+"dev": "npx tsx src/scripts/build-db.ts && node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
+"start": "npx tsx src/scripts/build-db.ts && node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
+"dev:server": "npx tsx src/scripts/build-db.ts && node src/scripts/copy-api.mjs && node server.mjs",
     "prebuild": "NODE_ENV=production npx tsx src/scripts/build-db.ts",
     "build": "node src/scripts/build.mjs",
     "preview": "node server.mjs",

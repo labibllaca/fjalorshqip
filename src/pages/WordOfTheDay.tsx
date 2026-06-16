@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Entry } from '../lib/dictionary';
 import { getWordOfTheDay } from '../lib/word-of-the-day';
 import { expandAbbr } from '../lib/abbrev';
+import { useEntry } from '../lib/entry-context';
 import SearchBar from '../components/searchbar/SearchBar';
 
 const dayNames = ['e diel', 'e hënë', 'e martë', 'e mërkurë', 'e enjte', 'e premte', 'e shtunë'];
@@ -14,13 +15,16 @@ function formatDate(d: Date): string {
 const WordOfTheDay = () => {
   const [loading, setLoading] = useState(true);
   const [entry, setEntry] = useState<Entry | null>(null);
+  const { setEntry: setCtxEntry } = useEntry();
 
   useEffect(() => {
     getWordOfTheDay()
       .then(slug => fetch(`/api/word/${encodeURIComponent(slug)}`))
       .then(r => r.json())
       .then((data: Entry[]) => {
-        setEntry(data[0] ?? null);
+        const e = data[0] ?? null;
+        setEntry(e);
+        setCtxEntry(e);
         setLoading(false);
       })
       .catch(() => setLoading(false));
