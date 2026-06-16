@@ -82,7 +82,7 @@ const WordGame = () => {
       setShake(true);
       clearTimeout(wrongTimer.current);
       wrongTimer.current = setTimeout(() => setShake(false), 500);
-      if (wc >= MAX_WRONG) { setPhase('revealed'); if (current) setShuffledTerm(shuffle(current.term)); }
+      if (wc >= MAX_WRONG && current) { setShuffledTerm(shuffle(current.term)); setHint(true); }
     }
   };
 
@@ -170,7 +170,7 @@ const WordGame = () => {
         </div>
 
         {hint && (
-          <p className={styles.hint}>{shuffle(current.term.toLowerCase())}</p>
+          <p className={styles.hint}>{shuffledTerm || shuffle(current.term.toLowerCase())}</p>
         )}
 
         {phase === 'playing' && (
