@@ -37,7 +37,10 @@ const push_query = async (query: string) => {
 };
 
 const SearchBar = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(() => {
+    const savedQuery = localStorage.getItem('fj_last_search_query');
+    return savedQuery || '';
+  });
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
   const [suggestPos, setSuggestPos] = useState({ top: 0, left: 0, width: 0 });
   const inputRef = useRef<HTMLInputElement>(null);
@@ -50,6 +53,18 @@ const SearchBar = () => {
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
   const { entry, crossRef, setCrossRef } = useEntry();
   const [fav, setFav] = useState(() => entry ? isFavorite(entry.slug) : false);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (query) {
+      localStorage.setItem('fj_last_search_query', query);
+    }
+  }, [query]);
 
   const openMenu = () => {
     clearTimeout(closeTimer.current);
