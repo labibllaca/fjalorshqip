@@ -28,7 +28,9 @@ const push_query = async (query: string) => {
     if (!document.__fjalorshqip__) {
       document.__fjalorshqip__ = random_string();
     }
-    umami.track('search_v2', {q: query, rs: document.__fjalorshqip__});
+    if (typeof umami !== 'undefined' && umami?.track) {
+      umami.track('search_v2', {q: query, rs: document.__fjalorshqip__});
+    }
   } catch (e) {
     console.error('unexpected error', e);
   }

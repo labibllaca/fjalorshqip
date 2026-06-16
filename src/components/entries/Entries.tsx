@@ -36,9 +36,13 @@ const AnimatedDef = ({ text, delay }: { text: string; delay: number }) => {
 const Entries = ({ entries = [] }: EntriesProps) => {
   const { crossRef } = useEntry();
   const [slugSet, setSlugSet] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getSlugSet().then(setSlugSet);
+    getSlugSet().then((data) => {
+      setSlugSet(data);
+      setLoading(false);
+    });
   }, []);
 
   const slugKey = entries[0]?.slug || 'empty';
@@ -55,7 +59,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
   );
 
   function renderDefWithCrossRef(text: string, delay: number) {
-    if (!crossRef || slugSet.size === 0) {
+    if (!crossRef || slugSet.size === 0 || loading) {
       return <AnimatedDef text={text} delay={delay} />;
     }
 
