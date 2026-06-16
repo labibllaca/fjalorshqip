@@ -73,7 +73,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
               <Link
                 key={wi}
                 to={`/f/${matched}`}
-                className={styles.crossref}
+                className={`${styles.crossref} ${wi < 5 ? styles.highlight : ''}`}
                 style={{ animationDelay: `${delay + wi * stagger}ms` }}
               >
                 {word}
@@ -83,7 +83,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
           return (
             <span
               key={wi}
-              className={styles.word}
+              className={`${styles.word} ${wi < 5 ? styles.highlight : ''}`}
               style={{ animationDelay: `${delay + wi * stagger}ms` }}
             >
               {word}
