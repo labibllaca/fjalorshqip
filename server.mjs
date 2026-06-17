@@ -111,21 +111,20 @@ app.get('/api/search', (req, res) => {
     }
 
     // 2. Diacritic-insensitive prefix match (ë/e, ç/c, both cases)
+    // Always runs so typing 'e' also finds 'ë' words and vice versa
     if (results.length < 10) {
       const folded = q.toLowerCase().replace(/ë/g, 'e').replace(/ç/g, 'c');
-      if (folded !== q.toLowerCase()) {
-        const foldRows = db.prepare(`
-          SELECT slug, term, attrs FROM entries
-          WHERE replace(replace(replace(replace(term, 'ë', 'e'), 'Ë', 'E'), 'ç', 'c'), 'Ç', 'C') LIKE ?
-          ORDER BY term
-          LIMIT ?
-        `).all(folded + '%', 10 - results.length);
+      const foldRows = db.prepare(`
+        SELECT slug, term, attrs FROM entries
+        WHERE replace(replace(replace(replace(term, 'ë', 'e'), 'Ë', 'E'), 'ç', 'c'), 'Ç', 'C') LIKE ?
+        ORDER BY term
+        LIMIT ?
+      `).all(folded + '%', 10 - results.length);
 
-        for (const r of foldRows) {
-          if (!seen.has(r.slug)) {
-            seen.add(r.slug);
-            results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs) });
-          }
+      for (const r of foldRows) {
+        if (!seen.has(r.slug)) {
+          seen.add(r.slug);
+          results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs) });
         }
       }
     }

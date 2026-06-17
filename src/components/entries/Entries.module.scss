@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 2em;
 }
 
 .definition {
@@ -51,9 +51,7 @@
   animation: wordIn 100ms ease-out backwards;
 }
 
-.word:not(:last-child) {
-  margin-right: 0.25em;
-}
+
 
 .crossref {
   display: inline-block;

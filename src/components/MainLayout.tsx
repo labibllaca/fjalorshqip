@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { EntryContext } from '../lib/entry-context';
 import type { Entry } from '../lib/dictionary';
 import { getCrossRefPref, setCrossRefPref } from '../lib/storage';
@@ -11,6 +11,7 @@ const MainLayout = () => {
   const [entry, setEntry] = useState<Entry | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [crossRef, setCrossRef] = useState(() => getCrossRefPref());
+  const { pathname } = useLocation();
 
   const handleSetCrossRef = useCallback((v: boolean) => {
     setCrossRef(v);
@@ -32,7 +33,7 @@ const MainLayout = () => {
       <div className="content">
         <header className="content-header">
           <div className="title-row">
-            <a href="/" className="site-title">Fjalor Shqip</a>
+            <a href="/" className="site-title">{pathname === '/fav' ? 'Fjal deshiruese' : 'Fja__ Lojë'}</a>
             <button
               className="drawer-toggle"
               onClick={toggleDrawer}
@@ -70,10 +71,12 @@ const MainLayout = () => {
         <div>&copy;{new Date().getFullYear()} fjalorshqip.com.</div>
       </footer>
 
-      <RightPanel
-        isOpen={drawerOpen}
-        onClose={closeDrawer}
-      />
+      {pathname === '/' && (
+        <RightPanel
+          isOpen={drawerOpen}
+          onClose={closeDrawer}
+        />
+      )}
     </EntryContext.Provider>
   );
 };

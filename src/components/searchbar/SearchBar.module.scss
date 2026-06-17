@@ -57,6 +57,7 @@
     border-radius: 4px;
     transition: color .15s, background .15s;
     flex-shrink: 0;
+    anchor-name: --search-menu-btn;
 
     &:hover {
       color: var(--accent);
@@ -82,7 +83,7 @@
     &:popover-open {
       display: block;
       position: fixed;
-      position-anchor: --search-bar-anchor;
+      position-anchor: --search-menu-btn;
       top: anchor(bottom);
       right: anchor(right);
       left: auto;
