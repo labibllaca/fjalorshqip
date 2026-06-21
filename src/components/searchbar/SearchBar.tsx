@@ -57,6 +57,8 @@ const SearchBar = () => {
   useEffect(() => {
     if (query) {
       localStorage.setItem('fj_last_search_query', query);
+    } else {
+      localStorage.removeItem('fj_last_search_query');
     }
   }, [query]);
 
@@ -68,6 +70,13 @@ const SearchBar = () => {
   useEffect(() => {
     setFocusedIndex(-1);
   }, [suggestions]);
+
+  useEffect(() => {
+    if (pathname.startsWith('/f/')) {
+      setQuery('');
+      setSuggestions([]);
+    }
+  }, [pathname]);
 
   const focusInput = () => {
     inputRef?.current?.focus();
@@ -90,6 +99,12 @@ const SearchBar = () => {
     return () => clearTimeout(timerRef.current);
   }, [query, doSearch]);
 
+  const clearSearch = () => {
+    localStorage.removeItem('fj_last_search_query');
+    setSuggestions([]);
+    setQuery('');
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (suggestions.length === 0) return;
 
@@ -103,9 +118,8 @@ const SearchBar = () => {
       if (focusedIndex >= 0 && focusedIndex < suggestions.length) {
         e.preventDefault();
         const selected = suggestions[focusedIndex];
+        clearSearch();
         navigate(`/f/${selected.slug}`, { viewTransition: true });
-        setSuggestions([]);
-        setQuery('');
       }
     } else if (e.key === 'Escape') {
       setSuggestions([]);
