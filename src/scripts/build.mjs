@@ -17,7 +17,4 @@ fs.cpSync(
   { force: true }
 );
 
-console.log('Generating static word pages...');
-execSync('node src/scripts/ssg.mjs', { stdio: 'inherit' });
-
 console.log('Build complete.');

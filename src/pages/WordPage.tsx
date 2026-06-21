@@ -7,21 +7,10 @@ import SearchBar from '../components/searchbar/SearchBar';
 import Entries from '../components/entries/Entries';
 import NotFound from '../components/notfound/NotFound';
 
-declare global {
-  interface Window { __INITIAL_DATA__?: Entry[] }
-}
-
 const WordPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [loading, setLoading] = useState(true);
-  const [entries, setEntries] = useState<Entry[]>(() => {
-    if (typeof window !== 'undefined' && window.__INITIAL_DATA__) {
-      const data = window.__INITIAL_DATA__;
-      window.__INITIAL_DATA__ = undefined;
-      return data;
-    }
-    return [];
-  });
+  const [entries, setEntries] = useState<Entry[]>([]);
   const { setEntry } = useEntry();
 
   useEffect(() => {
