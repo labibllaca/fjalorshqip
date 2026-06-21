@@ -48,19 +48,11 @@ const SearchBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  const hasFocused = useRef(false);
 
   const { entry, crossRef, setCrossRef } = useEntry();
   const [fav, setFav] = useState(() => entry ? isFavorite(entry.slug) : false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    if (pathname === '/' && inputRef.current && !hasFocused.current) {
-      inputRef.current.focus();
-      hasFocused.current = true;
-    }
-  }, [pathname]);
 
   useEffect(() => {
     if (query) {

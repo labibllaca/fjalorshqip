@@ -33,7 +33,7 @@ const MainLayout = () => {
       <div className="content">
         <header className="content-header">
           <div className="title-row">
-            <a href="/" className="site-title">{pathname === '/fav' ? 'Fjal deshiruese' : 'Fja__ Lojë'}</a>
+            <a href="/" className="site-title">{pathname === '/fav' ? 'Fjal deshiruese' : 'Fjalor'}</a>
             <button
               className="drawer-toggle"
               onClick={toggleDrawer}
