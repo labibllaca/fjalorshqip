@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getStems, getSlug, getStemPrefix } from '../process';
+import { getStems, getSlug } from '../process';
 
 describe('getStems', () => {
   it('lowercases and normalizes ë to e, ç to c', () => {
@@ -45,17 +45,3 @@ describe('getSlug', () => {
   });
 });
 
-describe('getStemPrefix', () => {
-  it('returns first 3 chars for stems >= 3 chars', () => {
-    expect(getStemPrefix('shqip')).toEqual('shq');
-  });
-
-  it('returns underscore for stems shorter than 3 chars', () => {
-    expect(getStemPrefix('a')).toEqual('_');
-    expect(getStemPrefix('ab')).toEqual('_');
-  });
-
-  it('returns first 3 chars for 4+ char stem', () => {
-    expect(getStemPrefix('baba')).toEqual('bab');
-  });
-});

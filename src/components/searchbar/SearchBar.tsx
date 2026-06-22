@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './SearchBar.module.scss';
-import { AnimatePresence, motion } from 'framer-motion';
-import classNames from 'classnames';
 import { useEntry } from '../../lib/entry-context';
 import { isFavorite, toggleFavorite } from '../../lib/storage';
 import { expandAttrs } from '../../lib/abbrev';
@@ -35,8 +33,6 @@ const push_query = async (query: string) => {
     console.error('unexpected error', e);
   }
 };
-
-const MotionLink = motion(Link);
 
 const SearchBar = () => {
   const [query, setQuery] = useState(() => {
@@ -140,9 +136,7 @@ const SearchBar = () => {
   return (
     <div className={styles.searchContainer} ref={containerRef}>
       <div
-        className={classNames(styles.searchbar, {
-          [styles.hasSuggestions]: suggestions.length !== 0,
-        })}
+        className={`${styles.searchbar}${suggestions.length !== 0 ? ' ' + styles.hasSuggestions : ''}`}
         onClick={focusInput}
       >
         <input
@@ -184,27 +178,19 @@ const SearchBar = () => {
         aria-label="Sugjerimet e kërkimit"
         className={styles.suggestions}
       >
-        <AnimatePresence>
-          {suggestions.map((suggestion, index) => (
-            <MotionLink
-              key={`${suggestion.slug}-${suggestion.attributes.join('-')}`}
-              to={`/f/${suggestion.slug}`}
-              viewTransition
-              className={classNames(styles.suggestion, {
-                [styles.focused]: index === focusedIndex
-              })}
-              role="option"
-              aria-selected={index === focusedIndex}
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.15 }}
-            >
-              <span className={styles.term}>{suggestion.term}</span>
-              <span className={styles.attrs}>{expandAttrs(suggestion.attributes)}</span>
-            </MotionLink>
-          ))}
-        </AnimatePresence>
+        {suggestions.map((suggestion, index) => (
+          <Link
+            key={`${suggestion.slug}-${suggestion.attributes.join('-')}`}
+            to={`/f/${suggestion.slug}`}
+            viewTransition
+            className={`${styles.suggestion}${index === focusedIndex ? ' ' + styles.focused : ''}`}
+            role="option"
+            aria-selected={index === focusedIndex}
+          >
+            <span className={styles.term}>{suggestion.term}</span>
+            <span className={styles.attrs}>{expandAttrs(suggestion.attributes)}</span>
+          </Link>
+        ))}
       </div>
       <div
         id="search-menu-popover"
@@ -239,7 +225,7 @@ const SearchBar = () => {
           Kopjo linkun
         </button>
         <label className={styles.menuToggle}>
-          <span className={classNames(styles.toggleTrack, { [styles.on]: crossRef })} onClick={() => setCrossRef(!crossRef)}>
+          <span className={`${styles.toggleTrack}${crossRef ? ' ' + styles.on : ''}`} onClick={() => setCrossRef(!crossRef)}>
             <span className={styles.toggleThumb} />
           </span>
           <span>Referencat e kryqëzuara</span>

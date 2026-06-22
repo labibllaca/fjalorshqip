@@ -199,6 +199,7 @@
       padding: 8px 10px;
       text-decoration: none;
       border-bottom: 1px solid #eee;
+      animation: suggestionFadeIn 0.2s ease both;
 
       &:last-child {
         border-bottom: none;
@@ -218,5 +219,16 @@
         color: #888;
       }
     }
+  }
+}
+
+@keyframes suggestionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
