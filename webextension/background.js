@@ -1,5 +1,3 @@
-importScripts('./suffixes.js');
-
 const API_BASE = 'https://fjalor.bashk.eu/api';
 
 chrome.runtime.onInstalled.addListener(() => {

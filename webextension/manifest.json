@@ -6,7 +6,7 @@
   "permissions": ["contextMenus", "activeTab"],
   "host_permissions": ["https://fjalor.bashk.eu/*"],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["suffixes.js", "background.js"]
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
