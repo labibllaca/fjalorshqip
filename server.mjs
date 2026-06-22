@@ -46,7 +46,7 @@ const stmts = {
     'SELECT slug, term, attrs, defs FROM entries WHERE slug = ?'
   ),
   ftsSearch: db.prepare(`
-    SELECT e.slug, e.term, e.attrs
+    SELECT e.slug, e.term, e.attrs, e.defs
     FROM entries_fts f
     JOIN entries e ON e.id = f.rowid
     WHERE entries_fts MATCH ?
@@ -102,12 +102,12 @@ app.get('/api/search', (req, res) => {
 
     // 1. Prefix match on term (autocomplete, uses idx_term index)
     const exactRows = db.prepare(
-      'SELECT slug, term, attrs FROM entries WHERE term LIKE ? ORDER BY term LIMIT 10'
+      'SELECT slug, term, attrs, defs FROM entries WHERE term LIKE ? ORDER BY term LIMIT 10'
     ).all(q + '%');
 
     for (const r of exactRows) {
       seen.add(r.slug);
-      results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs) });
+      results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
     }
 
     // 2. Diacritic-insensitive prefix match (ë/e, ç/c, both cases)
@@ -115,7 +115,7 @@ app.get('/api/search', (req, res) => {
     if (results.length < 10) {
       const folded = q.toLowerCase().replace(/ë/g, 'e').replace(/ç/g, 'c');
       const foldRows = db.prepare(`
-        SELECT slug, term, attrs FROM entries
+        SELECT slug, term, attrs, defs FROM entries
         WHERE replace(replace(replace(replace(term, 'ë', 'e'), 'Ë', 'E'), 'ç', 'c'), 'Ç', 'C') LIKE ?
         ORDER BY term
         LIMIT ?
@@ -124,7 +124,7 @@ app.get('/api/search', (req, res) => {
       for (const r of foldRows) {
         if (!seen.has(r.slug)) {
           seen.add(r.slug);
-          results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs) });
+          results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
         }
       }
     }
@@ -135,7 +135,7 @@ app.get('/api/search', (req, res) => {
       if (stems.length > 0 && stems.length <= MAX_STEMS) {
         const placeholders = stems.map(() => '?').join(', ');
         const stemRows = db.prepare(`
-          SELECT e.slug, e.term, e.attrs
+          SELECT e.slug, e.term, e.attrs, e.defs
           FROM entries e
           JOIN stems s ON s.entry_id = e.id
           WHERE s.stem IN (${placeholders})
@@ -147,7 +147,7 @@ app.get('/api/search', (req, res) => {
         for (const r of stemRows) {
           if (!seen.has(r.slug)) {
             seen.add(r.slug);
-            results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs) });
+            results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
           }
         }
 
@@ -157,7 +157,7 @@ app.get('/api/search', (req, res) => {
           for (const r of ftsRows) {
             if (!seen.has(r.slug)) {
               seen.add(r.slug);
-              results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs) });
+              results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
             }
           }
         }
