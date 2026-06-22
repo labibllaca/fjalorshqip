@@ -1,7 +1,7 @@
 .entries {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
   margin-top: 2em;
 }
 
@@ -9,17 +9,26 @@
   box-sizing: border-box;
   margin-left: 30px;
   scroll-margin-top: 80px;
-  font-family: 'Lora', Georgia, serif;
-  line-height: 1.55;
+  font-family: var(--type-sans, 'Inter', system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.7;
   text-wrap: pretty;
+  color: var(--text, #111827);
 }
 
 .title {
-  font-size: 1.2em;
-  font-weight: 600;
+  font-family: var(--type-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #000;
+  letter-spacing: -0.01em;
 }
 .attributes {
-  color: #655;
+  font-family: var(--type-sans, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #999;
 }
 
 .highlight {
