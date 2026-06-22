@@ -7,7 +7,8 @@
     "start": "npx tsx src/scripts/build-db.ts && node src/scripts/copy-api.mjs && npx concurrently --kill-others \"node server.mjs\" \"vite\"",
     "dev:server": "npx tsx src/scripts/build-db.ts && node src/scripts/copy-api.mjs && node server.mjs",
     "prebuild": "NODE_ENV=production npx tsx src/scripts/build-db.ts",
-    "build": "node src/scripts/build.mjs",
+    "build": "node scripts/build-ext.mjs && node src/scripts/build.mjs",
+    "build:ext": "node scripts/build-ext.mjs",
     "preview": "node server.mjs",
     "test": "vitest run",
     "test:watch": "vitest"

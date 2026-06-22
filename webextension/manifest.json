@@ -1,5 +1,11 @@
 {
   "manifest_version": 3,
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "fjalor@shqip.dev",
+      "strict_min_version": "115.0"
+    }
+  },
   "name": "Fjalor Shqip",
   "version": "1.0.0",
   "description": "Kërko fjalë në fjalorin shqip duke klikuar me të djathtën",
