@@ -45,6 +45,9 @@ const SearchBar = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const { entry, crossRef, setCrossRef } = useEntry();
   const [fav, setFav] = useState(() => entry ? isFavorite(entry.slug) : false);
   const navigate = useNavigate();
@@ -73,6 +76,28 @@ const SearchBar = () => {
       setSuggestions([]);
     }
   }, [pathname]);
+
+  // Close menu on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
+
+  // Close menu on Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [menuOpen]);
 
   const focusInput = () => {
     inputRef?.current?.focus();
@@ -122,16 +147,7 @@ const SearchBar = () => {
     }
   };
 
-  const closePopover = () => {
-    try {
-      const el = document.getElementById('search-menu-popover');
-      if (el && 'hidePopover' in el) {
-        (el as any).hidePopover();
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const closePopover = () => setMenuOpen(false);
 
   return (
     <div className={styles.searchContainer} ref={containerRef}>
@@ -163,7 +179,7 @@ const SearchBar = () => {
         )}
         <button
           className={styles.menuButton}
-          {...{ popovertarget: "search-menu-popover" }}
+          onClick={() => setMenuOpen(v => !v)}
           aria-label="Më shumë opsione"
           type="button"
         >
@@ -193,9 +209,8 @@ const SearchBar = () => {
         ))}
       </div>
       <div
-        id="search-menu-popover"
-        {...{ popover: "auto" }}
-        className={styles.menu}
+        ref={menuRef}
+        className={`${styles.menu} ${menuOpen ? styles.open : ''}`}
       >
         <button
           className={styles.menuItem}
