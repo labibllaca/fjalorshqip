@@ -20,13 +20,27 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 async function searchWord(word, tabId) {
   const candidates = tryStrip(word);
   for (const stem of candidates) {
-    const results = await fetchSearch(stem);
+    let results = await fetchSearch(stem);
     if (results && results.length > 0) {
+      results = await enrichDefinitions(results);
       chrome.tabs.sendMessage(tabId, { type: 'result', word: word, results });
       return;
     }
   }
   chrome.tabs.sendMessage(tabId, { type: 'result', word: word, results: [] });
+}
+
+async function enrichDefinitions(results) {
+  return await Promise.all(results.slice(0, 5).map(async (r) => {
+    if (r.definitions && r.definitions.length > 0) return r;
+    try {
+      const res = await fetch(`${API_BASE}/word/${r.slug}`);
+      const data = await res.json();
+      return data[0] || r;
+    } catch {
+      return r;
+    }
+  }));
 }
 
 async function fetchSearch(q) {
