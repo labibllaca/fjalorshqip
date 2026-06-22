@@ -71,12 +71,10 @@ const MainLayout = () => {
         <div>&copy;{new Date().getFullYear()} fjalorshqip.com.</div>
       </footer>
 
-      {pathname === '/' && (
-        <RightPanel
-          isOpen={drawerOpen}
-          onClose={closeDrawer}
-        />
-      )}
+      <RightPanel
+        isOpen={drawerOpen}
+        onClose={closeDrawer}
+      />
     </EntryContext.Provider>
   );
 };
