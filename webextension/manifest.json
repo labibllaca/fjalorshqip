@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Fjalor Shqip",
+  "version": "1.0.0",
+  "description": "Kërko fjalë në fjalorin shqip duke klikuar me të djathtën",
+  "permissions": ["contextMenus", "activeTab"],
+  "host_permissions": ["https://fjalor.bashk.eu/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}
