@@ -1,3 +1,0 @@
-User-agent: *
-Sitemap: https://fjalorshqip.com/sitemap.xml
-Disallow: /api/
