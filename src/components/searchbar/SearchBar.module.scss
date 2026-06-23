@@ -27,6 +27,7 @@
       border: none;
       outline: none;
       background: transparent;
+      color: var(--text);
     }
 
     .clearButton {
@@ -66,8 +67,8 @@
   .menu {
     display: none;
     min-width: 220px;
-    background: white;
-    border: 1px solid #ddd;
+    background: var(--surface);
+    border: 1px solid var(--border, #ddd);
     border-radius: 8px;
     box-shadow: 0 4px 16px rgba(0,0,0,.12);
     overflow: hidden;
@@ -104,7 +105,7 @@
       }
 
       &:hover {
-        background: #f5f5f5;
+        background: var(--hover-bg, #f5f5f5);
       }
     }
 
@@ -119,7 +120,7 @@
       transition: background .15s;
 
       &:hover {
-        background: #f5f5f5;
+        background: var(--hover-bg, #f5f5f5);
       }
 
       .toggleTrack {
@@ -186,11 +187,11 @@
       align-items: center;
       gap: 8px;
       color: #d53;
-      background-color: white;
+      background: var(--surface);
       transition: background-color 0.15s ease;
       padding: 8px 10px;
       text-decoration: none;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border, #eee);
       animation: suggestionFadeIn 0.2s ease both;
 
       &:last-child {
@@ -198,17 +199,17 @@
       }
 
       &:hover, &.focused {
-        background-color: #f5f5f5;
+        background: var(--hover-bg, #f5f5f5);
       }
 
       .term {
         font-weight: 500;
-        color: #222;
+        color: var(--text);
       }
 
       .attrs {
         font-size: 0.8em;
-        color: #888;
+        color: var(--muted, #888);
       }
     }
   }
