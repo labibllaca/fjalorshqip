@@ -74,6 +74,33 @@ function parseStems(q) {
 // Limit the number of ? placeholders to prevent abuse
 const MAX_STEMS = 10;
 
+app.get('/api/word/:slug/related', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT DISTINCT e.slug, e.term, e.attrs
+      FROM entries e
+      JOIN stems s ON s.entry_id = e.id
+      WHERE s.stem IN (
+        SELECT DISTINCT s2.stem
+        FROM stems s2
+        JOIN entries e2 ON e2.id = s2.entry_id
+        WHERE e2.slug = ?
+      )
+      AND e.slug != ?
+      ORDER BY e.term
+      LIMIT 20
+    `).all(req.params.slug, req.params.slug);
+    res.json(rows.map(r => ({
+      slug: r.slug,
+      term: r.term,
+      attributes: JSON.parse(r.attrs),
+    })));
+  } catch (err) {
+    console.error('Error in /api/word/:slug/related:', err.message);
+    res.json([]);
+  }
+});
+
 app.get('/api/word/:slug', (req, res) => {
   try {
     const rows = stmts.wordBySlug.all(req.params.slug);
@@ -89,6 +116,31 @@ app.get('/api/word/:slug', (req, res) => {
   } catch (err) {
     console.error('Error in /api/word/:slug:', err.message);
     res.status(500).json({ error: 'internal error' });
+  }
+});
+  try {
+    const rows = db.prepare(`
+      SELECT DISTINCT e.slug, e.term, e.attrs
+      FROM entries e
+      JOIN stems s ON s.entry_id = e.id
+      WHERE s.stem IN (
+        SELECT DISTINCT s2.stem
+        FROM stems s2
+        JOIN entries e2 ON e2.id = s2.entry_id
+        WHERE e2.slug = ?
+      )
+      AND e.slug != ?
+      ORDER BY e.term
+      LIMIT 20
+    `).all(req.params.slug, req.params.slug);
+    res.json(rows.map(r => ({
+      slug: r.slug,
+      term: r.term,
+      attributes: JSON.parse(r.attrs),
+    })));
+  } catch (err) {
+    console.error('Error in /api/word/:slug/related:', err.message);
+    res.json([]);
   }
 });
 
