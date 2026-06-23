@@ -5,7 +5,8 @@
       "id": "fjalor@shqip.dev",
       "strict_min_version": "115.0",
       "data_collection_permissions": {
-        "description": "Dërgon tekstin e zgjedhur nga përdoruesi në serverin e fjalorit për të kthyer përkufizime. Nuk mbledh, ruan ose ndan informacione personale."
+        "description": "Dërgon tekstin e zgjedhur nga përdoruesi në serverin e fjalorit për të kthyer përkufizime. Nuk mbledh, ruan ose ndan informacione personale.",
+        "required": true
       }
     }
   },
