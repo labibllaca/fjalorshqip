@@ -6,7 +6,7 @@
       "strict_min_version": "115.0",
       "data_collection_permissions": {
         "description": "Dërgon tekstin e zgjedhur nga përdoruesi në serverin e fjalorit për të kthyer përkufizime. Nuk mbledh, ruan ose ndan informacione personale.",
-        "required": ["Teksti i zgjedhur nga përdoruesi për kërkim fjalori"]
+        "required": ["searchTerms"]
       }
     }
   },
