@@ -79,30 +79,61 @@ function showPopup(word, results) {
   if (!sel.rangeCount) return;
   const rect = sel.getRangeAt(0).getBoundingClientRect();
 
-  const el = document.createElement('div');
-  el.id = 'fjalor-popup';
-  el.innerHTML = buildHTML(word, results);
+  const el = buildPopup(word, results);
   document.body.appendChild(el);
 
   positionPopup(el, rect);
   setupClose(el);
 }
 
-function buildHTML(word, results) {
+function buildPopup(word, results) {
+  const el = document.createElement('div');
+  el.id = 'fjalor-popup';
+
+  const header = document.createElement('div');
+  header.className = 'fj-header';
+  header.appendChild(document.createTextNode('Fjalor: '));
+  const strong = document.createElement('strong');
+  strong.textContent = word;
+  header.appendChild(strong);
+  el.appendChild(header);
+
   if (!results || results.length === 0) {
-    return `<div class="fj-header">Fjalor: <strong>${esc(word)}</strong></div>
-            <div class="fj-empty">Nuk u gjet</div>`;
+    const empty = document.createElement('div');
+    empty.className = 'fj-empty';
+    empty.textContent = 'Nuk u gjet';
+    el.appendChild(empty);
+    return el;
   }
-  let html = `<div class="fj-header">Fjalor: <strong>${esc(word)}</strong></div>`;
+
   for (const r of results) {
-    const attrs = r.attributes && r.attributes.length ? r.attributes.join(', ') : '';
+    const entry = document.createElement('div');
+    entry.className = 'fj-entry';
+
+    const term = document.createElement('div');
+    term.className = 'fj-term';
+    term.textContent = r.term;
+    if (r.attributes && r.attributes.length) {
+      const attrs = document.createElement('span');
+      attrs.className = 'fj-attrs';
+      attrs.textContent = r.attributes.join(', ');
+      term.appendChild(attrs);
+    }
+    entry.appendChild(term);
+
+    const list = document.createElement('ul');
+    list.className = 'fj-defs';
     const defs = r.definitions || [];
-    html += `<div class="fj-entry">
-      <div class="fj-term">${esc(r.term)} <span class="fj-attrs">${esc(attrs)}</span></div>
-      <ul class="fj-defs">${defs.map(d => `<li>${esc(d)}</li>`).join('')}</ul>
-    </div>`;
+    for (const d of defs) {
+      const li = document.createElement('li');
+      li.textContent = d;
+      list.appendChild(li);
+    }
+    entry.appendChild(list);
+    el.appendChild(entry);
   }
-  return html;
+
+  return el;
 }
 
 function positionPopup(el, rect) {
@@ -129,4 +160,4 @@ function removePopup() {
   if (old) old.remove();
 }
 
-function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+

@@ -3,11 +3,11 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "fjalor@shqip.dev",
-      "strict_min_version": "115.0"
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "description": "Dërgon tekstin e zgjedhur nga përdoruesi në serverin e fjalorit për të kthyer përkufizime. Nuk mbledh, ruan ose ndan informacione personale."
+      }
     }
-  },
-  "data_collection_permissions": {
-    "description": "Dërgon tekstin e zgjedhur nga përdoruesi në serverin e fjalorit për të kthyer përkufizime. Nuk mbledh, ruan ose ndan informacione personale."
   },
   "name": "Fjalor Shqip",
   "version": "1.0.0",
