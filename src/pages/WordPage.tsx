@@ -11,7 +11,11 @@ const WordPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<Entry[]>([]);
-  const { setEntry } = useEntry();
+  const { setEntry, setSlug } = useEntry();
+
+  useEffect(() => {
+    setSlug(slug ?? null);
+  }, [slug, setSlug]);
 
   useEffect(() => {
     if (!slug) { setLoading(false); return; }

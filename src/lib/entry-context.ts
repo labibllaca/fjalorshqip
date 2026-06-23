@@ -8,6 +8,8 @@ interface EntryContextValue {
   setCrossRef: (v: boolean) => void;
   panelOpen: boolean;
   togglePanel: () => void;
+  slug: string | null;
+  setSlug: (slug: string | null) => void;
 }
 
 export const EntryContext = createContext<EntryContextValue>({
@@ -17,6 +19,8 @@ export const EntryContext = createContext<EntryContextValue>({
   setCrossRef: () => {},
   panelOpen: false,
   togglePanel: () => {},
+  slug: null,
+  setSlug: () => {},
 });
 
 export const useEntry = () => useContext(EntryContext);
