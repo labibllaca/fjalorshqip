@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntry } from '../lib/entry-context';
 import './WordSidebar.scss';
@@ -13,6 +13,7 @@ const WordSidebar = () => {
   const { slug, panelOpen, togglePanel } = useEntry();
   const [related, setRelated] = useState<RelatedEntry[]>([]);
   const [loading, setLoading] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!slug) { setRelated([]); return; }
@@ -23,8 +24,20 @@ const WordSidebar = () => {
       .catch(() => { setRelated([]); setLoading(false); });
   }, [slug]);
 
+  useEffect(() => {
+    if (window.innerWidth > 1024 || !panelOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+        togglePanel();
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [panelOpen, togglePanel]);
+
   return (
     <aside
+      ref={sidebarRef}
       className={`word-sidebar ${panelOpen ? 'open' : ''}`}
       aria-label="Fjalë të lidhura"
     >
