@@ -11,16 +11,17 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and deploy
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.SSH_HOST_NAME }}
-          port: 19222
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ${{ secrets.APP_DIR }}
-            git pull
-            npm run build
-            pm2 reload fjalor
-          debug: true
+      - uses: actions/checkout@v4
+      - name: Deploy via SSH
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST_NAME }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          APP_DIR: ${{ secrets.APP_DIR }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p 19222 \
+            "$SSH_USER@$SSH_HOST" \
+            "cd $APP_DIR && git pull && npm run build && pm2 reload fjalor"
