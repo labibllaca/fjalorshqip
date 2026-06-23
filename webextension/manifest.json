@@ -9,8 +9,12 @@
   "name": "Fjalor Shqip",
   "version": "1.0.0",
   "description": "Kërko fjalë në fjalorin shqip duke klikuar me të djathtën",
-  "permissions": ["contextMenus", "activeTab"],
-  "host_permissions": ["https://fjalor.bashk.eu/*"],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "permissions": ["contextMenus", "activeTab", "storage"],
+  "host_permissions": ["https://*/*"],
   "background": {
     "scripts": ["suffixes.js", "background.js"]
   },

@@ -1,7 +1,17 @@
-const API_BASE = 'https://fjalor.bashk.eu/api';
+const DEFAULT_API = 'https://fjalor.bashk.eu/api';
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
+let API_BASE = DEFAULT_API;
+
+browser.storage.sync.get('api_base').then((data) => {
+  API_BASE = data.api_base || DEFAULT_API;
+});
+
+browser.storage.onChanged.addListener((changes) => {
+  if (changes.api_base) API_BASE = changes.api_base.newValue || DEFAULT_API;
+});
+
+browser.runtime.onInstalled.addListener(() => {
+  browser.contextMenus.create({
     id: 'lookup-fjalor',
     title: 'Fjalor: "%s"',
     contexts: ['selection']

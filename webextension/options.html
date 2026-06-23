@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Opsionet e Fjalorit</title>
+  <style>
+    body { font: 14px/1.5 system-ui, sans-serif; max-width: 480px; margin: 2rem auto; padding: 0 1rem; color: #111; background: #f5f5f5; }
+    h1 { font-size: 1.2rem; }
+    label { display: block; margin: 0 0 0.25rem; font-weight: 500; }
+    input[type="url"] { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font: 14px system-ui, sans-serif; box-sizing: border-box; }
+    .hint { font-size: 12px; color: #666; margin: 0.25rem 0 1rem; }
+    button { padding: 8px 20px; background: #d53; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button:hover { background: #c42; }
+    .msg { margin-top: 1rem; font-size: 13px; }
+    .msg.ok { color: #1a7; }
+    .msg.err { color: #c33; }
+  </style>
+</head>
+<body>
+  <h1>Opsionet e Fjalorit</h1>
+  <label for="api-url">URL e serverit API</label>
+  <input type="url" id="api-url" placeholder="https://fjalor.bashk.eu/api" />
+  <div class="hint">P.sh. https://fjalor.bashk.eu/api — ndryshoje vetëm nëse ke një server tjetër.</div>
+  <button id="save">Ruaj</button>
+  <div id="msg" class="msg"></div>
+  <script src="options.js"></script>
+</body>
+</html>
