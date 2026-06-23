@@ -32,6 +32,14 @@
   border-bottom: 1px solid rgba(255,255,255,.1);
 }
 
+.word-sidebar-section {
+  font-family: var(--type-serif, 'Playfair Display', Georgia, serif);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #fff;
+}
+
 .word-sidebar-list {
   display: flex;
   flex-direction: column;

@@ -72,6 +72,33 @@ const WordSidebar = () => {
           ))}
         </nav>
       )}
+      {entry && entry.definitions.length > 0 && (
+        <>
+          <hr className="panel-divider" />
+          <h3 className="word-sidebar-section">Përkufizimet</h3>
+          <nav className="panel-toc">
+            {entry.definitions.map((def, i) => (
+              <a
+                key={i}
+                href={`#def-0-${i}`}
+                className="panel-toc-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById(`def-0-${i}`);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                    el.style.animation = 'pulse 0.8s ease-in-out 3.75';
+                    setTimeout(() => el.style.animation = '', 3000);
+                  }
+                  if (window.innerWidth <= 1024) togglePanel();
+                }}
+              >
+                {i + 1}. {def.split(/\s+/).slice(0, 3).join(' ')}
+              </a>
+            ))}
+          </nav>
+        </>
+      )}
     </aside>
   );
 };
