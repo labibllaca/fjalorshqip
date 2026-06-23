@@ -15,7 +15,7 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST_NAME }}
           port: 19222
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
