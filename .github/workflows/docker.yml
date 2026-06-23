@@ -1,0 +1,20 @@
+name: Docker
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t fjalorshqip .
+      - name: Save image
+        run: docker save fjalorshqip | gzip > fjalorshqip.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: fjalorshqip.tar.gz
+          retention-days: 3
