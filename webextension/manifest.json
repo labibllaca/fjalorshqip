@@ -6,6 +6,9 @@
       "strict_min_version": "115.0"
     }
   },
+  "data_collection_permissions": {
+    "description": "Dërgon tekstin e zgjedhur nga përdoruesi në serverin e fjalorit për të kthyer përkufizime. Nuk mbledh, ruan ose ndan informacione personale."
+  },
   "name": "Fjalor Shqip",
   "version": "1.0.0",
   "description": "Kërko fjalë në fjalorin shqip duke klikuar me të djathtën",
