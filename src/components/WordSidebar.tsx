@@ -10,7 +10,7 @@ interface RelatedEntry {
 }
 
 const WordSidebar = () => {
-  const { slug, panelOpen, togglePanel } = useEntry();
+  const { slug, panelOpen, togglePanel, entry } = useEntry();
   const [related, setRelated] = useState<RelatedEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
