@@ -25,3 +25,9 @@ Te gjitha komandat mund te thirren nga baza e projektit permes terminalit:
 | `npm run build`           | Ndërton faqen në folderin `./dist/`              |
 | 'npm rebuild better-sqlite3' | |
 
+## Docker
+
+```bash
+docker compose up -d --build
+```
+
