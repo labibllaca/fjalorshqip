@@ -52,6 +52,9 @@ function injectStyles() {
   margin-bottom: 4px; color: #000; line-height: 1.7;
   padding-left: 14px; position: relative;
 }
+#fjalor-popup .fj-defs li .fj-hl {
+  font-weight: 600;
+}
 #fjalor-popup .fj-defs li::before {
   content: ''; position: absolute; left: 0; top: 10px;
   width: 6px; height: 1px; background: #ccc;
@@ -84,6 +87,17 @@ function showPopup(word, results) {
 
   positionPopup(el, rect);
   setupClose(el);
+}
+
+function highlightFirstWords(text) {
+  const match = text.match(/^(\s*\d+\.\s*)(.*)/);
+  const prefix = match ? match[1] : '';
+  const rest = match ? match[2] : text;
+  const words = rest.split(/\s+/).filter(Boolean);
+  if (words.length === 0) return text;
+  const firstThree = words.slice(0, 3).join(' ');
+  const remainder = words.slice(3).join(' ');
+  return prefix + '<span class="fj-hl">' + firstThree + '</span>' + (remainder ? ' ' + remainder : '');
 }
 
 function buildPopup(word, results) {
@@ -128,7 +142,7 @@ function buildPopup(word, results) {
     const defs = r.definitions || [];
     for (const d of defs) {
       const li = document.createElement('li');
-      li.textContent = d;
+      li.innerHTML = highlightFirstWords(d);
       list.appendChild(li);
     }
     entry.appendChild(list);
