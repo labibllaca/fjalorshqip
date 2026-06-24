@@ -11,7 +11,7 @@
     }
   },
   "name": "Fjalor Shqip",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Kërko fjalë në fjalorin shqip duke klikuar me të djathtën",
   "options_ui": {
     "page": "options.html",

@@ -96,6 +96,8 @@ function buildPopup(word, results) {
   const strong = document.createElement('strong');
   strong.textContent = word;
   header.appendChild(strong);
+  const date = document.createTextNode(' — ' + new Date().toLocaleDateString('de-DE'));
+  header.appendChild(date);
   el.appendChild(header);
 
   if (!results || results.length === 0) {
