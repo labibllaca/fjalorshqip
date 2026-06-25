@@ -10,12 +10,11 @@ const Favorites = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Të preferuarat</h2>
+    <div className="fav-page">
       {favs.length === 0 ? (
         <p>Nuk ka të preferuara ende.</p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, textAlign: 'center' }}>
           {favs.map(f => (
             <li key={f.slug} style={{ marginBottom: 8 }}>
               <Link to={`/f/${f.slug}`} viewTransition>{f.term}</Link>

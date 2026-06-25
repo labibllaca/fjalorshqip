@@ -21,11 +21,27 @@ const WordPage = () => {
     if (!slug) { setLoading(false); return; }
     setLoading(true);
     setEntries([]);
-    fetch(`/api/word/${encodeURIComponent(slug)}`)
+
+    const wordUrl = `/api/word/${encodeURIComponent(slug)}`;
+    const searchUrl = `/api/search?q=${encodeURIComponent(slug)}`;
+
+    fetch(wordUrl)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        setEntries(data ?? []);
-        setLoading(false);
+        if (data && data.length > 0) {
+          setEntries(data);
+          setLoading(false);
+        } else {
+          fetch(searchUrl)
+            .then((r) => r.json())
+            .then((results: Entry[]) => {
+              if (results && results.length > 0) {
+                setEntries(results);
+              }
+              setLoading(false);
+            })
+            .catch(() => setLoading(false));
+        }
       })
       .catch(() => { setEntries([]); setLoading(false); });
   }, [slug]);

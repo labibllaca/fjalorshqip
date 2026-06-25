@@ -2,10 +2,9 @@ import styles from './NotFound.module.scss';
 
 const NotFound = () => {
   return (
-    <>
-      <div className={styles.title}>404</div>
-      <div className={styles.description}>Faqja nuk u gjet</div>
-    </>
+    <div className={styles.wrapper}>
+      <div className={styles.title}>Fjalja nuk u gjet</div>
+    </div>
   );
 };
 
