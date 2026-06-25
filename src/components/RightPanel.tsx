@@ -121,8 +121,6 @@ const RightPanel = ({ isOpen, onClose }: RightPanelProps) => {
               <p className="panel-text">
                 Fjalor i gjuhës shqipe me mijëra fjalë dhe përkufizime.
               </p>
-              <hr className="panel-divider" />
-              <Link to="/rreth" className="btn" viewTransition>Rreth</Link>
             </>
           )}
         </div>
