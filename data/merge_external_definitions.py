@@ -175,6 +175,56 @@ def build_kaikki_index() -> dict:
 
 # ── HuggingFace source ──
 
+ROMAN_HF = {'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'}
+
+
+def split_full_header(full_header: str) -> tuple[str, str]:
+    """
+    Split a full_header into (header_part, definition_part).
+
+    The HuggingFace dataset's full_header sometimes contains the entire 
+    first line of the dictionary entry (word + POS + first definition merged).
+    This function extracts just the header (word + POS tags).
+
+    Example:
+        'AKREDITIV m. sh. Dokument i lëshuar...'
+        -> ('AKREDITIV m. sh.', 'Dokument i lëshuar...')
+    """
+    header = full_header.strip()
+    parts = header.split()
+    if not parts:
+        return header, ''
+
+    header_parts = [parts[0]]
+    split_idx = 1
+    roman_zone = True
+
+    for idx, part in enumerate(parts[1:], 1):
+        is_header = False
+        if roman_zone and part in ROMAN_HF:
+            is_header = True
+        elif part.endswith('.,'):
+            stripped = part.rstrip('.,')
+            if 1 <= len(stripped) <= 8 and stripped.isalpha():
+                is_header = True
+        elif part.endswith('.'):
+            stripped = part.rstrip('.')
+            if 1 <= len(stripped) <= 8 and stripped.isalpha():
+                is_header = True
+
+        if is_header:
+            header_parts.append(part)
+            split_idx = idx + 1
+            if part not in ROMAN_HF:
+                roman_zone = False
+        else:
+            break
+
+    header_str = ' '.join(header_parts)
+    rest = ' '.join(parts[split_idx:]) if split_idx < len(parts) else ''
+    return header_str, rest
+
+
 def clean_hf_word(word: str) -> str:
     """Strip Roman numeral suffix from HF words (e.g. 'A I' -> 'A')."""
     return re.sub(r'\s+[IVXLCDM]+$', '', word.upper().strip())
@@ -183,13 +233,16 @@ def clean_hf_word(word: str) -> str:
 def merge_hf(word: str, entry: dict) -> dict | None:
     full_header = entry.get('full_header', '') or ''
     if full_header.strip():
-        term = full_header.strip() + ' '
+        header_part, def_part = split_full_header(full_header)
+        term = header_part.strip() + ' '
     else:
         syn = entry.get('syntactic_tag') or ''
         term = make_term(word, syn if syn else None)
+        def_part = ''
 
     senses = entry.get('senses') or []
     dtext = entry.get('definition') or ''
+
     if senses:
         defs = []
         for i, s in enumerate(senses, 1):
@@ -201,8 +254,13 @@ def merge_hf(word: str, entry: dict) -> dict | None:
                 defs.append(f'{sep}{i}. {s}.')
     elif dtext:
         defs = [dtext]
+        if def_part:
+            defs[0] = def_part + ' ' + defs[0]
     else:
-        return None
+        if def_part:
+            defs = [def_part]
+        else:
+            return None
 
     return {'term': term.upper(), 'definition': defs}
 
