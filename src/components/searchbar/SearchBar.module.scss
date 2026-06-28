@@ -48,7 +48,7 @@
 
       &:hover {
         color: var(--accent);
-        background: rgba(0,0,0,.04);
+        background: var(--hover-bg);
       }
     }
   }
@@ -65,7 +65,7 @@
 
     &:hover {
       color: var(--accent);
-      background: rgba(0,0,0,.04);
+      background: var(--hover-bg);
     }
   }
 
@@ -75,7 +75,7 @@
     background: var(--surface);
     border: 1px solid var(--border, #ddd);
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    box-shadow: var(--shadow-elevated);
     overflow: hidden;
     padding: 0;
 
