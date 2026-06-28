@@ -542,6 +542,36 @@ h1, h2, h3, h4, h5, h6 {
 }
 .btn-ghost:hover { border-color: var(--accent); }
 
+/* ── FAB for mobile ribbon ── */
+.fab-ribbon {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 84px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  box-shadow: var(--shadow-elevated);
+  cursor: pointer;
+  z-index: 99;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.fab-ribbon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(221, 85, 51, .35);
+}
+
+@media (max-width: 1024px) {
+  .fab-ribbon {
+    display: flex;
+  }
+}
+
 /* ── Accessibility ── */
 :focus { outline: 3px solid #ffd54f; outline-offset: 2px; }
 :focus:not(:focus-visible) { outline: none; }
