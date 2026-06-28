@@ -12,7 +12,7 @@ const About = () => {
         me ndryshue prej burimit në burim.
       </p>
       <p>
-        Për pyetje, propozime, a naj reanim:
+        Për pyetje, propozime, kontaktoni te adresa:
         <br />
         Email: <a href="mailto:kontakt@bashk.eu">kontakt@bashk.eu</a>
       </p>
