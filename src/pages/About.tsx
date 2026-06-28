@@ -3,7 +3,7 @@ const About = () => {
     <div style={{ maxWidth: 620, margin: '0 auto', lineHeight: 1.8 }}>
       <h1>Rreth FjalorShqip</h1>
       <p>
-        Ky âsht nji projekt privat hobi, i ndërtue prej nji njeriu që i don fjalët e shqipes
+        Ky osht nji projekt privat hobi, i ndërtue prej nji njeriu që i don fjalët e shqipes
         e don me i ba t'qasshme për këdo në internet.
       </p>
       <p>
@@ -15,11 +15,6 @@ const About = () => {
         Për pyetje, propozime, a naj reanim:
         <br />
         Email: <a href="mailto:kontakt@bashk.eu">kontakt@bashk.eu</a>
-        <br />
-        GitHub:{' '}
-        <a href="https://github.com/shqip-dev/fjalorshqip.com" target="_blank" rel="noopener noreferrer">
-          shqip-dev/fjalorshqip.com
-        </a>
       </p>
     </div>
   );
