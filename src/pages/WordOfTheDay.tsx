@@ -50,7 +50,7 @@ const WordOfTheDay = () => {
 
   return (
     <div className="wotd-page">
-      <div className="wotd-hero">
+      <div className="wotd-card">
         <p className="wotd-date">{formatDate(new Date())}</p>
         <h1 className="wotd-term">{entry.term}</h1>
         {entry.attributes.length > 0 && (
