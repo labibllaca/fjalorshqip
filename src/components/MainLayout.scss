@@ -273,10 +273,12 @@ h1, h2, h3, h4, h5, h6 {
 .wotd-term {
   margin: 0 0 0.25rem;
   font-family: var(--type-serif);
-  font-size: 4rem;
+  font-size: clamp(1.8rem, 8vw, 4rem);
   font-weight: 600;
   line-height: 1.1;
   color: var(--text);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .wotd-attrs {
