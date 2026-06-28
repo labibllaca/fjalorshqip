@@ -7,14 +7,18 @@
   --accent: #d53;
   --accent-hover: #c42;
   --text: #111827;
-  --max-width: 880px;
-  --narrow-max: 620px;
   --gap: 24px;
-  --radius: 6px;
   --type-serif: 'Playfair Display', Georgia, serif;
   --type-sans: 'Inter', system-ui, sans-serif;
-  --left-col: 48px;
-  --right-col: 300px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-pill: 999px;
+  --shadow-float: 0 4px 24px rgba(0,0,0,.06), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-elevated: 0 8px 32px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
+  --max-reading: 720px;
+  --nav-width: 52px;
+  --ribbon-width: 260px;
+  --line-height-reading: 1.8;
 }
 
 /* ── Themes ── */
@@ -84,11 +88,8 @@ body {
 }
 
 #root {
-  display: grid;
-  grid-template-columns: var(--left-col) 1fr;
-  grid-template-rows: 1fr auto;
-  gap: var(--gap);
-  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
@@ -141,13 +142,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Content ── */
 .content {
-  grid-column: 2;
   width: 100%;
-  max-width: var(--max-width);
+  max-width: var(--max-reading);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  padding: 24px 16px;
 }
 
 .content:has(.home-page) {
@@ -333,9 +334,10 @@ h1, h2, h3, h4, h5, h6 {
 .drawer-toggle:focus { background: rgba(0,0,0,.04); }
 
 .content-footer {
-  grid-column: 2;
-  grid-row: 2;
-  padding: 32px 0 16px;
+  max-width: var(--max-reading);
+  margin: 0 auto;
+  padding: 32px 16px 16px;
+  width: 100%;
   font-size: 14px;
   color: var(--muted);
   display: flex;
