@@ -38,7 +38,7 @@ const WordSidebar = () => {
   return (
     <aside
       ref={sidebarRef}
-      className={`word-sidebar ${panelOpen ? 'open' : ''}`}
+      className={`ribbon-card ${panelOpen ? 'open' : ''}`}
       aria-label="Fjalë të lidhura"
     >
       <button className="panel-close" onClick={() => togglePanel()} aria-label="Mbyll panelin">

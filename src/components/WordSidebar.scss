@@ -1,43 +1,19 @@
-.word-sidebar {
-  position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--right-col, 300px);
-  background: var(--panel);
-  color: var(--panel-text);
-  font-size: 14px;
-  line-height: 1.5;
-  z-index: 200;
-  transform: translateX(calc(100% - 20%));
-  transition: transform .22s ease;
-  will-change: transform;
-  padding: 24px 20px 20px;
-  overflow-y: auto;
-  box-shadow: none;
-}
-.word-sidebar:hover,
-.word-sidebar.open {
-  transform: translateX(0);
-  box-shadow: -8px 0 24px rgba(0,0,0,.15);
-}
-
 .word-sidebar-header {
-  font-family: var(--type-serif, 'Playfair Display', Georgia, serif);
+  font-family: var(--type-serif);
   font-size: 16px;
   font-weight: 600;
-  margin: 0 0 16px;
-  color: #fff;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  margin: 0 0 12px;
+  color: var(--text);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
 }
 
 .word-sidebar-section {
-  font-family: var(--type-serif, 'Playfair Display', Georgia, serif);
+  font-family: var(--type-serif);
   font-size: 14px;
   font-weight: 600;
   margin: 0 0 8px;
-  color: #fff;
+  color: var(--text);
 }
 
 .word-sidebar-list {
@@ -48,18 +24,18 @@
 
 .word-sidebar-link {
   display: block;
-  padding: 8px 10px;
+  padding: 6px 8px;
   font-size: 14px;
-  color: var(--panel-text);
+  color: var(--text);
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   line-height: 1.4;
-  opacity: .85;
+  opacity: .8;
   transition: opacity .15s, background .15s;
 }
 .word-sidebar-link:hover {
   opacity: 1;
-  background: rgba(255,255,255,.08);
+  background: var(--hover-bg);
 }
 
 .word-sidebar-term {
@@ -73,31 +49,12 @@
 }
 
 .word-sidebar-empty {
-  color: var(--panel-text);
-  opacity: .5;
+  color: var(--muted);
   font-style: italic;
   font-size: 13px;
 }
 
 .word-sidebar-loading {
-  color: var(--panel-text);
-  opacity: .5;
+  color: var(--muted);
   font-size: 13px;
-}
-
-/* Responsive: drawer on tablet/mobile */
-@media (max-width: 1024px) {
-  .word-sidebar {
-    transform: translateX(100%);
-    transition: transform .28s cubic-bezier(.4,0,.2,1);
-    z-index: 50;
-  }
-  .word-sidebar.open {
-    transform: translateX(0);
-    z-index: 999;
-  }
-  .word-sidebar:hover {
-    transform: translateX(100%);
-    box-shadow: none;
-  }
 }
