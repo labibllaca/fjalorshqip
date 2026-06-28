@@ -14,7 +14,7 @@ const About = () => {
       <p>
         Për pyetje, propozime, a naj reanim:
         <br />
-        Email: <a href="mailto:contact@shqip.dev">contact@shqip.dev</a>
+        Email: <a href="mailto:kontakt@bashk.eu">kontakt@bashk.eu</a>
         <br />
         GitHub:{' '}
         <a href="https://github.com/shqip-dev/fjalorshqip.com" target="_blank" rel="noopener noreferrer">
