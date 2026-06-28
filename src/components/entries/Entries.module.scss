@@ -1,8 +1,20 @@
 .entries {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  margin-top: 2em;
+  gap: 16px;
+  margin-top: 1.5em;
+}
+
+.entryCard {
+  background: var(--surface);
+  border-radius: var(--radius-md, 16px);
+  box-shadow: var(--shadow-float);
+  padding: 24px 28px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.entryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
 }
 
 .definition {
@@ -11,7 +23,7 @@
   scroll-margin-top: 80px;
   font-family: var(--type-sans, 'Inter', system-ui, sans-serif);
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: var(--line-height-reading, 1.8);
   text-wrap: pretty;
   color: var(--text, #111827);
 }
@@ -20,7 +32,7 @@
   font-family: var(--type-serif, 'Playfair Display', Georgia, serif);
   font-size: 1.8em;
   font-weight: 700;
-  color: #000;
+  color: var(--text);
   letter-spacing: -0.01em;
 }
 .attributes {
@@ -28,19 +40,19 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #999;
+  color: var(--muted);
 }
 
 .highlight {
-  background: #fef08a;
-  color: #1a1205;
+  background: rgba(221, 85, 51, .12);
+  color: var(--text);
   padding: 0 2px;
   border-radius: 2px;
 }
 
 .highlight.crossref {
-  background: #fef08a;
-  color: #1a1205;
+  background: rgba(221, 85, 51, .12);
+  color: var(--text);
   padding: 0 2px;
   border-radius: 2px;
 }

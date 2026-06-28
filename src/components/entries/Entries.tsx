@@ -98,7 +98,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
   return (
     <div className={styles.entries} key={slugKey}>
       {entries.map((entry, entryIdx) => (
-        <div key={`entry-${entryIdx}`}>
+        <div key={`entry-${entryIdx}`} className={styles.entryCard}>
           <span className={styles.title}>{entry.term}</span>{' '}
           <span className={styles.attributes}>{expandAttrs(entry.attributes)}</span>
           <br />
