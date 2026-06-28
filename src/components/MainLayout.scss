@@ -672,18 +672,27 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse 0.8s ease-in-out 3.75;
 }
 
+/* ── Card Lift Utility ── */
+.card-lift {
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+}
+
 /* View Transitions */
 ::view-transition-old(root) {
-  animation: fade-out 0.2s ease-out;
+  animation: fade-out .15s ease-out;
 }
 ::view-transition-new(root) {
-  animation: fade-in 0.2s ease-in;
+  animation: slide-fade-in .2s ease-out;
 }
 @keyframes fade-out {
   from { opacity: 1; }
   to { opacity: 0; }
 }
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes slide-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
