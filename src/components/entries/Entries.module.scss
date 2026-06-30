@@ -89,3 +89,17 @@
 .crossref:not(:last-child) {
   margin-right: 0.25em;
 }
+
+@media (max-width: 600px) {
+  .entryCard {
+    padding: 16px;
+    border-radius: var(--radius-sm, 8px);
+  }
+  .title {
+    font-size: 1.4em;
+  }
+  .definition {
+    margin-left: 6px;
+    font-size: .95rem;
+  }
+}

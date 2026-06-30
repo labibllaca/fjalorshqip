@@ -692,6 +692,8 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     transform: translateY(100%);
     opacity: 1;
+    overflow-y: auto;
+    padding-bottom: 72px;
     transition: transform .28s cubic-bezier(.4,0,.2,1);
   }
   .right-panel.open,
