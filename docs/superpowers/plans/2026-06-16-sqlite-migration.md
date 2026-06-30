@@ -500,9 +500,9 @@ for (const entry of entries) {
 // Generate sitemap
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://fjalorshqip.com/</loc></url>
-  <url><loc>https://fjalorshqip.com/rreth</loc></url>
-${pages.map(slug => `  <url><loc>https://fjalorshqip.com/f/${slug}</loc></url>`).join('\n')}
+  <url><loc>https://fjalor.bashk.eu/</loc></url>
+  <url><loc>https://fjalor.bashk.eu/rreth</loc></url>
+${pages.map(slug => `  <url><loc>https://fjalor.bashk.eu/f/${slug}</loc></url>`).join('\n')}
 </urlset>`;
 fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemap);
 

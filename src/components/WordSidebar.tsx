@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntry } from '../lib/entry-context';
 import './WordSidebar.scss';
@@ -14,6 +14,35 @@ const WordSidebar = () => {
   const [related, setRelated] = useState<RelatedEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
+  const [isDesktop, setIsDesktop] = useState(true);
+  const [minimized, setMinimized] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1025px)');
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const startTimer = useCallback(() => {
+    clearTimeout(timerRef.current);
+    if (isDesktop) timerRef.current = setTimeout(() => setMinimized(true), 15000);
+  }, [isDesktop]);
+
+  const stopTimer = useCallback(() => clearTimeout(timerRef.current), []);
+
+  useEffect(() => {
+    if (!isDesktop) { setMinimized(false); return; }
+    startTimer();
+    return () => clearTimeout(timerRef.current);
+  }, [isDesktop, slug, startTimer]);
+
+  const expand = () => {
+    setMinimized(false);
+    stopTimer();
+  };
 
   useEffect(() => {
     if (!slug) { setRelated([]); return; }
@@ -38,9 +67,18 @@ const WordSidebar = () => {
   return (
     <aside
       ref={sidebarRef}
-      className={`ribbon-card ${panelOpen ? 'open' : ''}`}
+      className={`ribbon-card ${panelOpen ? 'open' : ''} ${minimized ? 'minimized' : ''}`}
       aria-label="Fjalë të lidhura"
+      onClick={minimized ? expand : undefined}
+      onMouseEnter={minimized ? expand : stopTimer}
+      onMouseLeave={startTimer}
     >
+      <div className="panel-mini-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4M12 8h.01"/>
+        </svg>
+      </div>
       <button className="panel-close" onClick={() => togglePanel()} aria-label="Mbyll panelin">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/>

@@ -30,7 +30,7 @@ export function scrapedEntryToEntry(scrapedEntry: ScrapedEntry): Entry {
   const term = rest.join(' ') || parts[0];
   let defs = scrapedEntry.definition.map(d => d.trim());
   if (defs.length > 1) {
-    defs = defs.map(d => d.replace(/^\d+\.\s*/, ''));
+    defs = defs.map(d => d.replace(/^(?:\d+\.\s*)+/, ''));
   }
   return {
     term,

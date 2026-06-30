@@ -408,25 +408,55 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--shadow-float);
   padding: 20px;
   opacity: .3;
-  transition: opacity .3s ease, box-shadow .3s ease;
   z-index: 50;
-  overflow-y: auto;
+  overflow: hidden;
   max-height: 70vh;
+  transition: width .35s ease, border-radius .35s ease, padding .35s ease, box-shadow .35s ease, opacity .35s ease;
 }
 .right-panel:hover,
 .right-panel.open {
   opacity: 1;
   box-shadow: var(--shadow-elevated);
 }
-
-.right-panel.dismissed {
-  opacity: .3 !important;
-  box-shadow: var(--shadow-float) !important;
+.right-panel.minimized {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  opacity: .7;
+  cursor: pointer;
+  box-shadow: var(--shadow-elevated);
+  background: var(--accent);
+  color: #fff;
+}
+.right-panel.minimized:hover {
+  opacity: 1;
+}
+.right-panel .panel-mini-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+.right-panel.minimized .panel-mini-icon {
+  opacity: 1;
+}
+.right-panel.minimized .panel-inner,
+.right-panel.minimized .panel-close,
+.right-panel.minimized .panel-toc {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .ribbon-card {
   position: fixed;
   right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
   width: var(--ribbon-width);
   background: var(--surface);
   color: var(--text);
@@ -434,14 +464,43 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--shadow-float);
   padding: 20px;
   z-index: 50;
-  overflow-y: auto;
+  overflow: hidden;
   max-height: 35vh;
+  transition: width .35s ease, border-radius .35s ease, padding .35s ease, box-shadow .35s ease;
 }
-.ribbon-card:first-of-type {
-  top: calc(50% - 19vh);
+.ribbon-card.minimized {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-elevated);
+  background: var(--accent);
+  color: #fff;
 }
-.ribbon-card:last-of-type {
-  top: calc(50% + 2vh);
+.ribbon-card .panel-mini-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+.ribbon-card.minimized .panel-mini-icon {
+  opacity: 1;
+}
+.ribbon-card.minimized .word-sidebar-header,
+.ribbon-card.minimized .word-sidebar-list,
+.ribbon-card.minimized .word-sidebar-empty,
+.ribbon-card.minimized .word-sidebar-loading,
+.ribbon-card.minimized .panel-divider,
+.ribbon-card.minimized .word-sidebar-section,
+.ribbon-card.minimized .panel-toc,
+.ribbon-card.minimized .panel-close {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .panel-close {
