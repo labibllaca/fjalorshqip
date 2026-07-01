@@ -32,6 +32,12 @@ const MainLayout = () => {
       {/* Desktop left nav — becomes top bar on mobile via CSS */}
       <LeftNav />
 
+      <div className="bg-orbs" aria-hidden="true">
+        <div className="bg-orb bg-orb--1" />
+        <div className="bg-orb bg-orb--2" />
+        <div className="bg-orb bg-orb--3" />
+      </div>
+
       <div className="content">
         <header className="content-header">
           <div className="title-row">

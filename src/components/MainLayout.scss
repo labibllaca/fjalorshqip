@@ -637,6 +637,72 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ── Background Orbs ── */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2em);
+  opacity: 0.15;
+  will-change: transform;
+}
+
+.bg-orb--1 {
+  width: 500px;
+  height: 500px;
+  background: var(--accent);
+  top: -10%;
+  left: -5%;
+  animation: orbFloat1 25s ease-in-out infinite;
+}
+
+.bg-orb--2 {
+  width: 400px;
+  height: 400px;
+  background: #d53;
+  bottom: -8%;
+  right: -5%;
+  opacity: 0.1;
+  animation: orbFloat2 30s ease-in-out infinite;
+}
+
+.bg-orb--3 {
+  width: 350px;
+  height: 350px;
+  background: var(--accent-hover);
+  top: 40%;
+  left: 50%;
+  opacity: 0.08;
+  animation: orbFloat3 20s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(120px, 80px) scale(1.1); }
+  50% { transform: translate(60px, 160px) scale(0.95); }
+  75% { transform: translate(-40px, 60px) scale(1.05); }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-100px, -60px) scale(1.08); }
+  66% { transform: translate(-50px, -140px) scale(0.92); }
+}
+
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(-50%, 0) scale(1); }
+  25% { transform: translate(-30%, -60px) scale(1.05); }
+  50% { transform: translate(-60%, -30px) scale(0.95); }
+  75% { transform: translate(-40%, 40px) scale(1.02); }
+}
+
 /* ── Accessibility ── */
 :focus { outline: 3px solid #ffd54f; outline-offset: 2px; }
 :focus:not(:focus-visible) { outline: none; }
