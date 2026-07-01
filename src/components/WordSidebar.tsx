@@ -86,30 +86,31 @@ const WordSidebar = () => {
         </svg>
       </button>
 
-      <h2 className="word-sidebar-header">Fjalë të lidhura</h2>
-
-      {loading ? (
-        <div className="word-sidebar-loading">Duke u ngarkuar...</div>
-      ) : related.length === 0 ? (
-        <div className="word-sidebar-empty">Nuk u gjetën fjalë të lidhura</div>
-      ) : (
-        <nav className="word-sidebar-list">
-          {related.map(r => (
-            <Link
-              key={r.slug}
-              to={`/f/${r.slug}`}
-              className="word-sidebar-link"
-              viewTransition
-              onClick={() => { if (window.innerWidth <= 1024) togglePanel(); }}
-            >
-              <span className="word-sidebar-term">{r.term}</span>
-              {r.attributes.length > 0 && (
-                <span className="word-sidebar-attrs">{r.attributes.join(', ')}</span>
-              )}
-            </Link>
-          ))}
-        </nav>
-      )}
+      {related.length > 0 || loading ? (
+        <>
+          <h2 className="word-sidebar-header">Fjalë të lidhura</h2>
+          {loading ? (
+            <div className="word-sidebar-loading">Duke u ngarkuar...</div>
+          ) : (
+            <nav className="word-sidebar-list">
+              {related.map(r => (
+                <Link
+                  key={r.slug}
+                  to={`/f/${r.slug}`}
+                  className="word-sidebar-link"
+                  viewTransition
+                  onClick={() => { if (window.innerWidth <= 1024) togglePanel(); }}
+                >
+                  <span className="word-sidebar-term">{r.term}</span>
+                  {r.attributes.length > 0 && (
+                    <span className="word-sidebar-attrs">{r.attributes.join(', ')}</span>
+                  )}
+                </Link>
+              ))}
+            </nav>
+          )}
+        </>
+      ) : null}
       {entry && entry.definitions.length > 0 && (
         <>
           <hr className="panel-divider" />

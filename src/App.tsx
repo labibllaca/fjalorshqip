@@ -14,9 +14,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/f/:slug" element={<WordPage />} />
         <Route path="/sot" element={<WordOfTheDay />} />
-        <Route path="/fav" element={<Favorites />} />
+        <Route path="/des" element={<Favorites />} />
         <Route path="/rreth" element={<About />} />
-        <Route path="/spiel" element={<WordGame />} />
+        <Route path="/loj" element={<WordGame />} />
       </Route>
     </Routes>
   );
