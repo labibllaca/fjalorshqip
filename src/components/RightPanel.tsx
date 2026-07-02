@@ -150,7 +150,7 @@ const RightPanel = ({ isOpen, onClose }: RightPanelProps) => {
               <path d="M12 17h.01"/>
             </svg>
           </Link>
-          <a href="/fjalor-shqip.xpi" className="footer-icon" aria-label="Instalo shtesën për Firefox" download>
+          <a href="https://addons.mozilla.org/de/firefox/addon/fjalor-shqip/" className="footer-icon" aria-label="Instalo shtesën për Firefox" target="_blank" rel="noreferrer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
