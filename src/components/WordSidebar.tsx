@@ -15,7 +15,7 @@ const WordSidebar = () => {
   const [related, setRelated] = useState<RelatedEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
-  const { isDesktop, minimized, expand, startTimer, stopTimer } = usePanelAutoMinimize();
+  const { isDesktop, minimized, expand, minimize, startTimer, stopTimer } = usePanelAutoMinimize();
 
   useEffect(() => {
     if (!slug) { setRelated([]); return; }
@@ -48,7 +48,7 @@ const WordSidebar = () => {
           <path d="M12 16v-4M12 8h.01"/>
         </svg>
       </div>
-      <button className="panel-close" onClick={() => setMinimized(true)} aria-label="Mbyll panelin">
+      <button className="panel-close" onClick={minimize} aria-label="Mbyll panelin">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>

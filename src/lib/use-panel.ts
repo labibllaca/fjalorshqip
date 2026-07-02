@@ -28,5 +28,7 @@ export function usePanelAutoMinimize() {
     return () => clearTimeout(timerRef.current);
   }, [isDesktop, startTimer]);
 
-  return { isDesktop, minimized, expand, startTimer, stopTimer };
+  const minimize = useCallback(() => setMinimized(true), []);
+
+  return { isDesktop, minimized, expand, minimize, startTimer, stopTimer };
 }
