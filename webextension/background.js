@@ -18,7 +18,7 @@ browser.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.contextMenus.onClicked.addListener((info, tab) => {
+browser.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId !== 'lookup-fjalor') return;
   const raw = info.selectionText.trim();
   if (!raw) return;

@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntry } from '../lib/entry-context';
+import { usePanelAutoMinimize } from '../lib/use-panel';
 import { expandAbbr } from '../lib/abbrev';
 
 function firstWords(text: string, n = 4): string {
@@ -15,62 +16,19 @@ interface RightPanelProps {
 const RightPanel = ({ isOpen, onClose }: RightPanelProps) => {
   const { entry } = useEntry();
   const drawerRef = useRef<HTMLDivElement>(null);
-  const [isDesktop, setIsDesktop] = useState(true);
-  const [minimized, setMinimized] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const { isDesktop, minimized, expand, startTimer, stopTimer } = usePanelAutoMinimize();
 
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1025px)');
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  const startTimer = useCallback(() => {
-    clearTimeout(timerRef.current);
-    if (isDesktop) timerRef.current = setTimeout(() => setMinimized(true), 15000);
-  }, [isDesktop]);
-
-  const stopTimer = useCallback(() => clearTimeout(timerRef.current), []);
-
-  useEffect(() => {
-    if (!isDesktop) { setMinimized(false); return; }
-    startTimer();
-    return () => clearTimeout(timerRef.current);
-  }, [isDesktop, entry, startTimer]);
-
-  const expand = () => {
-    setMinimized(false);
-    stopTimer();
-  };
-
-  const handleClose = () => onClose();
-
-  useEffect(() => {
-    if (!isDesktop && !isOpen) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isDesktop && !isOpen) {
-          drawerRef.current?.blur();
-        } else {
-          onClose();
-        }
-      }
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [isDesktop, isOpen, onClose]);
+    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', h);
+    return () => document.removeEventListener('keydown', h);
+  }, [onClose]);
 
   useEffect(() => {
     if (isDesktop || !isOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const h = (e: MouseEvent) => { if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) onClose(); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
   }, [isDesktop, isOpen, onClose]);
 
   return (

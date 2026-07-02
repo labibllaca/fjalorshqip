@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntry } from '../lib/entry-context';
+import { usePanelAutoMinimize } from '../lib/use-panel';
 import './WordSidebar.scss';
 
 interface RelatedEntry {
@@ -14,35 +15,7 @@ const WordSidebar = () => {
   const [related, setRelated] = useState<RelatedEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
-  const [isDesktop, setIsDesktop] = useState(true);
-  const [minimized, setMinimized] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
-
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1025px)');
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  const startTimer = useCallback(() => {
-    clearTimeout(timerRef.current);
-    if (isDesktop) timerRef.current = setTimeout(() => setMinimized(true), 15000);
-  }, [isDesktop]);
-
-  const stopTimer = useCallback(() => clearTimeout(timerRef.current), []);
-
-  useEffect(() => {
-    if (!isDesktop) { setMinimized(false); return; }
-    startTimer();
-    return () => clearTimeout(timerRef.current);
-  }, [isDesktop, slug, startTimer]);
-
-  const expand = () => {
-    setMinimized(false);
-    stopTimer();
-  };
+  const { isDesktop, minimized, expand, startTimer, stopTimer } = usePanelAutoMinimize();
 
   useEffect(() => {
     if (!slug) { setRelated([]); return; }
@@ -55,13 +28,9 @@ const WordSidebar = () => {
 
   useEffect(() => {
     if (window.innerWidth > 1024 || !panelOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
-        togglePanel();
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const h = (e: MouseEvent) => { if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) togglePanel(); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
   }, [panelOpen, togglePanel]);
 
   return (

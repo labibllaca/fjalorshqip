@@ -64,9 +64,17 @@ const stmts = {
 
 const app = express();
 
+const foldDiacritic = (s) => s.toLowerCase().replace(/ë/g, 'e').replace(/ç/g, 'c');
+
+const jsonRow = (r) => ({
+  slug: r.slug,
+  term: r.term,
+  attributes: JSON.parse(r.attrs),
+  ...(r.defs ? { definitions: JSON.parse(r.defs) } : {}),
+});
+
 function parseStems(q) {
-  return q.toLowerCase()
-    .replace(/ë/g, 'e').replace(/ç/g, 'c')
+  return foldDiacritic(q)
     .split(/\s+/)
     .filter(s => /^[a-z]+$/.test(s) && !STOP_WORDS.has(s));
 }
@@ -90,11 +98,7 @@ app.get('/api/word/:slug/related', (req, res) => {
       ORDER BY e.term
       LIMIT 20
     `).all(req.params.slug, req.params.slug);
-    res.json(rows.map(r => ({
-      slug: r.slug,
-      term: r.term,
-      attributes: JSON.parse(r.attrs),
-    })));
+    res.json(rows.map(jsonRow));
   } catch (err) {
     console.error('Error in /api/word/:slug/related:', err.message);
     res.json([]);
@@ -104,15 +108,8 @@ app.get('/api/word/:slug/related', (req, res) => {
 app.get('/api/word/:slug', (req, res) => {
   try {
     const rows = stmts.wordBySlug.all(req.params.slug);
-    if (rows.length === 0) {
-      return res.status(404).json({ error: 'not found' });
-    }
-    res.json(rows.map(r => ({
-      slug: r.slug,
-      term: r.term,
-      attributes: JSON.parse(r.attrs),
-      definitions: JSON.parse(r.defs),
-    })));
+    if (rows.length === 0) return res.status(404).json({ error: 'not found' });
+    res.json(rows.map(jsonRow));
   } catch (err) {
     console.error('Error in /api/word/:slug:', err.message);
     res.status(500).json({ error: 'internal error' });
@@ -127,20 +124,14 @@ app.get('/api/search', (req, res) => {
     const seen = new Set();
     const results = [];
 
-    // 1. Prefix match on term (autocomplete, uses idx_term index)
     const exactRows = db.prepare(
       'SELECT slug, term, attrs, defs FROM entries WHERE term LIKE ? ORDER BY term LIMIT 10'
     ).all(q + '%');
 
-    for (const r of exactRows) {
-      seen.add(r.slug);
-      results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
-    }
+    for (const r of exactRows) { seen.add(r.slug); results.push(jsonRow(r)); }
 
-    // 2. Diacritic-insensitive prefix match (ë/e, ç/c, both cases)
-    // Always runs so typing 'e' also finds 'ë' words and vice versa
     if (results.length < 10) {
-      const folded = q.toLowerCase().replace(/ë/g, 'e').replace(/ç/g, 'c');
+      const folded = foldDiacritic(q);
       const foldRows = db.prepare(`
         SELECT slug, term, attrs, defs FROM entries
         WHERE replace(replace(replace(replace(term, 'ë', 'e'), 'Ë', 'E'), 'ç', 'c'), 'Ç', 'C') LIKE ?
@@ -149,14 +140,10 @@ app.get('/api/search', (req, res) => {
       `).all(folded + '%', 10 - results.length);
 
       for (const r of foldRows) {
-        if (!seen.has(r.slug)) {
-          seen.add(r.slug);
-          results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
-        }
+        if (!seen.has(r.slug)) { seen.add(r.slug); results.push(jsonRow(r)); }
       }
     }
 
-    // 3. Multi-word: supplement with stem + FTS
     if (results.length < 5 && q.includes(' ')) {
       const stems = parseStems(q);
       if (stems.length > 0 && stems.length <= MAX_STEMS) {
@@ -171,21 +158,12 @@ app.get('/api/search', (req, res) => {
           LIMIT 10
         `).all(...stems, stems.length);
 
-        for (const r of stemRows) {
-          if (!seen.has(r.slug)) {
-            seen.add(r.slug);
-            results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
-          }
-        }
+        for (const r of stemRows) { if (!seen.has(r.slug)) { seen.add(r.slug); results.push(jsonRow(r)); } }
 
         if (results.length < 5) {
           const ftsQuery = stems.map(s => `"${s}"`).join(' AND ');
-          const ftsRows = stmts.ftsSearch.all(ftsQuery, 10);
-          for (const r of ftsRows) {
-            if (!seen.has(r.slug)) {
-              seen.add(r.slug);
-              results.push({ slug: r.slug, term: r.term, attributes: JSON.parse(r.attrs), definitions: JSON.parse(r.defs) });
-            }
+          for (const r of stmts.ftsSearch.all(ftsQuery, 10)) {
+            if (!seen.has(r.slug)) { seen.add(r.slug); results.push(jsonRow(r)); }
           }
         }
       }
@@ -201,15 +179,9 @@ app.get('/api/search', (req, res) => {
 app.get('/api/random', (req, res) => {
   const n = Math.min(parseInt(req.query.n) || 20, 50);
   try {
-    const rows = db.prepare(
+    res.json(db.prepare(
       'SELECT slug, term, attrs, defs FROM entries ORDER BY RANDOM() LIMIT ?'
-    ).all(n);
-    res.json(rows.map(r => ({
-      slug: r.slug,
-      term: r.term,
-      attributes: JSON.parse(r.attrs),
-      definitions: JSON.parse(r.defs),
-    })));
+    ).all(n).map(jsonRow));
   } catch (err) {
     console.error('Error in /api/random:', err.message);
     res.json([]);
@@ -231,7 +203,7 @@ app.get('/api/suggest', (req, res) => {
   const q = (req.query.q || '').toString().trim();
   if (!q || q.length < 3) return res.json([]);
 
-  const stem = q.toLowerCase().replace(/ë/g, 'e').replace(/ç/g, 'c');
+  const stem = foldDiacritic(q);
   try {
     const rows = stmts.suggest.all(stem + '%');
     res.json(rows);

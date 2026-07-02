@@ -1,11 +1,10 @@
+import { foldDiacritic } from './normalize';
+
 const NON_ALPHA_REGEX = /[^a-zA-Z]/g;
 const WHITESPACE_REGEX = /\s+/;
 
 export const getStems = (term: string) => {
-  return term
-    .toLowerCase()
-    .replaceAll('ë', 'e')
-    .replaceAll('ç', 'c')
+  return foldDiacritic(term)
     .split(WHITESPACE_REGEX)
     .map((word) => word.replace(NON_ALPHA_REGEX, ''))
     .filter((word) => word !== '');
