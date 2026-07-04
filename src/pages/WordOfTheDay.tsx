@@ -18,16 +18,38 @@ const WordOfTheDay = () => {
   const { setEntry: setCtxEntry } = useEntry();
 
   useEffect(() => {
-    getWordOfTheDay()
-      .then(slug => fetch(`/api/word/${encodeURIComponent(slug)}`))
-      .then(r => r.json())
-      .then((data: Entry[]) => {
-        const e = data[0] ?? null;
-        setEntry(e);
-        setCtxEntry(e);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    let cancelled = false;
+    let retries = 0;
+    const MAX_RETRIES = 50;
+
+    const fetchWord = (): void => {
+      if (cancelled) return;
+
+      getWordOfTheDay()
+        .then(slug => fetch(`/api/word/${encodeURIComponent(slug)}`))
+        .then(r => r.json())
+        .then((data: Entry[]) => {
+          if (cancelled) return;
+          const e = data[0] ?? null;
+          if (e?.definitions?.length) {
+            setEntry(e);
+            setCtxEntry(e);
+            setLoading(false);
+          } else if (retries < MAX_RETRIES) {
+            retries++;
+            fetchWord();
+          } else {
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) setLoading(false);
+        });
+    };
+
+    fetchWord();
+
+    return () => { cancelled = true; };
   }, []);
 
   if (loading) {
