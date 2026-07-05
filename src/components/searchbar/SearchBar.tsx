@@ -156,7 +156,7 @@ const SearchBar = () => {
         onClick={focusInput}
       >
         <input
-          type="text"
+          type="search"
           size={1}
           placeholder="Kërko"
           ref={inputRef}
@@ -167,6 +167,9 @@ const SearchBar = () => {
           aria-expanded={suggestions.length > 0}
           aria-controls="search-suggestions"
           aria-haspopup="listbox"
+          aria-label="Kërko fjalë në fjalor"
+          inputMode="search"
+          autoComplete="off"
           onKeyDown={handleKeyDown}
         />
         {query && (

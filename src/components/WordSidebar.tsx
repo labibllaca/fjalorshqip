@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntry } from '../lib/entry-context';
 import { usePanelAutoMinimize } from '../lib/use-panel';
-import './WordSidebar.scss';
+import styles from './WordSidebar.module.scss';
 
 interface RelatedEntry {
   slug: string;
@@ -57,22 +57,22 @@ const WordSidebar = () => {
 
       {related.length > 0 || loading ? (
         <>
-          <h2 className="word-sidebar-header">Fjalë të lidhura</h2>
+          <h2 className={styles.header}>Fjalë të lidhura</h2>
           {loading ? (
-            <div className="word-sidebar-loading">Duke u ngarkuar...</div>
+            <div className={styles.loading}>Duke u ngarkuar...</div>
           ) : (
-            <nav className="word-sidebar-list">
+            <nav className={styles.list}>
               {related.map(r => (
                 <Link
                   key={r.slug}
                   to={`/f/${r.slug}`}
-                  className="word-sidebar-link"
+                  className={styles.link}
                   viewTransition
                   onClick={() => { if (window.innerWidth <= 1024) togglePanel(); }}
                 >
-                  <span className="word-sidebar-term">{r.term}</span>
+                  <span className={styles.term}>{r.term}</span>
                   {r.attributes.length > 0 && (
-                    <span className="word-sidebar-attrs">{r.attributes.join(', ')}</span>
+                    <span className={styles.attrs}>{r.attributes.join(', ')}</span>
                   )}
                 </Link>
               ))}
@@ -83,7 +83,7 @@ const WordSidebar = () => {
       {entry && entry.definitions.length > 0 && (
         <>
           <hr className="panel-divider" />
-          <h3 className="word-sidebar-section">Përkufizimet</h3>
+          <h3 className={styles.section}>Përkufizimet</h3>
           <nav className="panel-toc">
             {entry.definitions.map((def, i) => (
               <a

@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div style={{ maxWidth: 620, margin: '0 auto', lineHeight: 1.8 }}>
+    <div className="about-page">
       <h1>Rreth FjalorShqip</h1>
       <p>
         Ky osht nji projekt privat hobi, i ndërtue prej nji njeriu që i don fjalët e shqipes

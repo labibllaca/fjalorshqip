@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { Entry } from '../lib/dictionary';
+import { foldDiacritic } from '../lib/normalize';
 import SearchBar from '../components/searchbar/SearchBar';
 import styles from './WordGame.module.scss';
 
@@ -13,7 +14,9 @@ function shuffle(s: string): string {
 }
 
 function blurDef(def: string, term: string): (string | { t: string; blurred: boolean })[] {
-  const idx = def.toLowerCase().indexOf(term.toLowerCase());
+  const normDef = foldDiacritic(def);
+  const normTerm = foldDiacritic(term);
+  const idx = normDef.indexOf(normTerm);
   if (idx === -1) return [def];
   return [
     def.slice(0, idx),
@@ -97,12 +100,14 @@ const WordGame = () => {
     if (!current || phase !== 'playing') return;
     
     const term = current.term.toLowerCase();
+    const normTerm = foldDiacritic(term);
     const newRevealed = new Set(revealedPositions);
     const newAnimating = new Set<number>();
     
-    for (const char of value.toLowerCase()) {
+    for (const rawChar of value.toLowerCase()) {
+      const char = foldDiacritic(rawChar);
       for (let i = 0; i < term.length; i++) {
-        if (term[i] === char && !revealedPositions.has(i)) {
+        if (normTerm[i] === char && !revealedPositions.has(i)) {
           newRevealed.add(i);
           newAnimating.add(i);
         }

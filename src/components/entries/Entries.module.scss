@@ -7,7 +7,7 @@
 
 .entryCard {
   background: var(--surface);
-  border-radius: var(--radius-md, 16px);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-float);
   padding: 24px 28px;
   transition: transform .2s ease, box-shadow .2s ease;
@@ -21,22 +21,22 @@
   box-sizing: border-box;
   margin-left: 30px;
   scroll-margin-top: 80px;
-  font-family: var(--type-sans, 'Inter', system-ui, sans-serif);
+  font-family: var(--type-sans);
   font-size: 1rem;
-  line-height: var(--line-height-reading, 1.8);
+  line-height: var(--line-height-reading);
   text-wrap: pretty;
-  color: var(--text, #111827);
+  color: var(--text);
 }
 
 .title {
-  font-family: var(--type-serif, 'Playfair Display', Georgia, serif);
+  font-family: var(--type-serif);
   font-size: 1.8em;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.01em;
 }
 .attributes {
-  font-family: var(--type-sans, 'Inter', system-ui, sans-serif);
+  font-family: var(--type-sans);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -44,14 +44,14 @@
 }
 
 .highlight {
-  background: rgba(221, 85, 51, .12);
+  background: rgba(var(--accent-rgb), .12);
   color: var(--text);
   padding: 0 2px;
   border-radius: 2px;
 }
 
 .highlight.crossref {
-  background: rgba(221, 85, 51, .12);
+  background: rgba(var(--accent-rgb), .12);
   color: var(--text);
   padding: 0 2px;
   border-radius: 2px;
@@ -93,7 +93,7 @@
 @media (max-width: 600px) {
   .entryCard {
     padding: 16px;
-    border-radius: var(--radius-sm, 8px);
+    border-radius: var(--radius-sm);
   }
   .title {
     font-size: 1.4em;
@@ -101,5 +101,15 @@
   .definition {
     margin-left: 6px;
     font-size: .95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word {
+    animation: none;
+  }
+
+  .crossref {
+    animation: none;
   }
 }

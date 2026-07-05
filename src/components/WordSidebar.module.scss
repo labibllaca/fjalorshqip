@@ -1,4 +1,4 @@
-.word-sidebar-header {
+.header {
   font-family: var(--type-serif);
   font-size: 16px;
   font-weight: 600;
@@ -8,7 +8,7 @@
   border-bottom: 1px solid var(--border);
 }
 
-.word-sidebar-section {
+.section {
   font-family: var(--type-serif);
   font-size: 14px;
   font-weight: 600;
@@ -16,13 +16,13 @@
   color: var(--text);
 }
 
-.word-sidebar-list {
+.list {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.word-sidebar-link {
+.link {
   display: block;
   padding: 6px 8px;
   font-size: 14px;
@@ -33,28 +33,28 @@
   opacity: .8;
   transition: opacity .15s, background .15s;
 }
-.word-sidebar-link:hover {
+.link:hover {
   opacity: 1;
   background: var(--hover-bg);
 }
 
-.word-sidebar-term {
+.term {
   font-weight: 500;
 }
 
-.word-sidebar-attrs {
+.attrs {
   font-size: 12px;
   opacity: .6;
   margin-left: 6px;
 }
 
-.word-sidebar-empty {
+.empty {
   color: var(--muted);
   font-style: italic;
   font-size: 13px;
 }
 
-.word-sidebar-loading {
+.loading {
   color: var(--muted);
   font-size: 13px;
 }
