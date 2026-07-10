@@ -50,6 +50,8 @@ const WordPage = () => {
     if (entries[0]) {
       setEntry(entries[0]);
       addToHistory(entries[0].slug, entries[0].term);
+    } else {
+      setEntry(null);
     }
   }, [entries, setEntry]);
 

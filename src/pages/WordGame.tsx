@@ -61,7 +61,7 @@ const WordGame = () => {
     fetch('/api/random?n=20')
       .then(r => r.json())
       .then((data: Entry[]) => {
-        setWords(data);
+        setWords(data.filter(e => e.definitions?.length));
         setLoading(false);
       })
       .catch(() => setLoading(false));

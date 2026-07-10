@@ -180,7 +180,7 @@ app.get('/api/random', (req, res) => {
   const n = Math.min(parseInt(req.query.n) || 20, 50);
   try {
     res.json(db.prepare(
-      'SELECT slug, term, attrs, defs FROM entries ORDER BY RANDOM() LIMIT ?'
+      "SELECT slug, term, attrs, defs FROM entries WHERE defs IS NOT NULL AND defs != '[]' ORDER BY RANDOM() LIMIT ?"
     ).all(n).map(jsonRow));
   } catch (err) {
     console.error('Error in /api/random:', err.message);

@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'MADE SAONARA PERSONAL USE';
+  src: url('/fonts/MADE%20SAONARA%20PERSONAL%20USE.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #f5f5f5;
   --surface: #ffffff;
@@ -100,6 +108,8 @@ body {
   min-height: 100vh;
 }
 
+p { font-family: 'MADE SAONARA PERSONAL USE', serif; }
+
 a { color: var(--accent); word-wrap: break-word; hyphens: auto; }
 
 h1, h2, h3, h4, h5, h6 {
@@ -158,6 +168,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   max-width: var(--max-reading);
   margin: 0 auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -291,7 +302,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wotd-card {
-  background: var(--surface);
   border-radius: var(--radius-md);
   padding: 32px 40px;
   box-shadow: var(--shadow-float);
@@ -344,7 +354,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .wotd-def {
   margin: 0;
-  font-family: var(--type-sans);
+  font-family: 'MADE SAONARA PERSONAL USE', serif;
   font-size: 1.15rem;
   line-height: 1.7;
   color: var(--text);
@@ -762,12 +772,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: auto;
 }
 
-/* Desktop: mehr vertikaler Raum */
-@media (min-width: 1025px) {
-  .content:not(:has(.home-page)) {
-    padding-top: 8vh;
-  }
-}
+
 
 /* ── Responsive ── */
 
