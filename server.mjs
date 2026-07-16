@@ -59,7 +59,7 @@ const stmts = {
     ORDER BY e.term
     LIMIT 8
   `),
-  allSlugs: db.prepare('SELECT DISTINCT slug FROM entries'),
+  allSlugs: db.prepare("SELECT DISTINCT slug FROM entries WHERE defs IS NOT NULL AND defs != '[]'"),
 };
 
 const app = express();
