@@ -25,7 +25,7 @@ const WordOfTheDay = () => {
     const fetchWord = (): void => {
       if (cancelled) return;
 
-      getWordOfTheDay()
+      getWordOfTheDay(retries > 0)
         .then(slug => fetch(`/api/word/${encodeURIComponent(slug)}`))
         .then(r => r.json())
         .then((data: Entry[]) => {

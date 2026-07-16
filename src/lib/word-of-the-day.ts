@@ -36,11 +36,11 @@ function saveCache(cache: Record<string, string>) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
 }
 
-export async function getWordOfTheDay(): Promise<string> {
+export async function getWordOfTheDay(bypassCache = false): Promise<string> {
   const date = today();
   const cache = loadCache();
 
-  if (cache[date]) return cache[date];
+  if (!bypassCache && cache[date]) return cache[date];
 
   const res = await fetch('/api/slugs');
   const allSlugs: string[] = await res.json();
