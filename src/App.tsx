@@ -6,22 +6,19 @@ import Favorites from './pages/Favorites';
 import About from './pages/About';
 import WordOfTheDay from './pages/WordOfTheDay';
 import WordGame from './pages/WordGame';
-import DevToolsGuard from './components/DevToolsGuard';
 
 const App = () => {
   return (
-    <DevToolsGuard>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/f/:slug" element={<WordPage />} />
-          <Route path="/sot" element={<WordOfTheDay />} />
-          <Route path="/des" element={<Favorites />} />
-          <Route path="/rreth" element={<About />} />
-          <Route path="/loj" element={<WordGame />} />
-        </Route>
-      </Routes>
-    </DevToolsGuard>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/f/:slug" element={<WordPage />} />
+        <Route path="/sot" element={<WordOfTheDay />} />
+        <Route path="/des" element={<Favorites />} />
+        <Route path="/rreth" element={<About />} />
+        <Route path="/loj" element={<WordGame />} />
+      </Route>
+    </Routes>
   );
 };
 
