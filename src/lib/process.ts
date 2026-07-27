@@ -13,8 +13,8 @@ export const getStems = (term: string) => {
 export const getSlug = (term: string) => {
   return term
     .toLowerCase()
-    .replaceAll('ë', 'ee')
-    .replaceAll('ç', 'cc')
+    .replaceAll('ë', 'e')
+    .replaceAll('ç', 'c')
     .split(WHITESPACE_REGEX)
     .map((word) => word.replace(NON_ALPHA_REGEX, ''))
     .filter((word) => word !== '')

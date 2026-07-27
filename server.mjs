@@ -57,7 +57,7 @@ const stmts = {
     JOIN stems s ON s.entry_id = e.id
     WHERE s.stem LIKE ?
     ORDER BY e.term
-    LIMIT 8
+    LIMIT 20
   `),
   allSlugs: db.prepare("SELECT DISTINCT slug FROM entries WHERE defs IS NOT NULL AND defs != '[]'"),
 };

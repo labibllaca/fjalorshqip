@@ -28,8 +28,12 @@ function build() {
     const rawInstruments: { name: string; description: string }[] = JSON.parse(
       readFileSync(instrumentsPath, 'utf-8')
     );
+    function truncateAtEnc(text: string): string {
+      const idx = text.search(/\bEnc[.:]/);
+      return idx === -1 ? text.trim() : text.slice(0, idx).trim();
+    }
     for (const inst of rawInstruments) {
-      rawEntries.push({ term: inst.name, definition: [inst.description] });
+      rawEntries.push({ term: inst.name, definition: [truncateAtEnc(inst.description)] });
     }
     console.log(`Merged ${rawInstruments.length} instrument entries`);
   }
