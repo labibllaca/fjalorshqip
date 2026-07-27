@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { Entry } from '../../lib/dictionary';
-import { expandAttrs } from '../../lib/abbrev';
+import { expandAbbr } from '../../lib/abbrev';
 import { getSlugSet, wordToSlug, matchSlug } from '../../lib/crossref';
 import { useEntry } from '../../lib/entry-context';
 import styles from './Entries.module.scss';
@@ -100,7 +100,7 @@ const Entries = ({ entries = [] }: EntriesProps) => {
       {entries.map((entry, entryIdx) => (
         <div key={`entry-${entryIdx}`} className={styles.entryCard}>
           <span className={styles.title}>{entry.term}</span>{' '}
-          <span className={styles.attributes}>{expandAttrs(entry.attributes)}</span>
+          <span className={styles.attributes}>{entry.attributes.map(expandAbbr).join(', ')}</span>
           <br />
           {entry.definitions.map((definition, defIdx) => {
             const num = entry.definitions.length > 1 ? `${defIdx + 1}. ` : '';

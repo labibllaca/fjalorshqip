@@ -1,3 +1,5 @@
+import { read, write } from './storage';
+
 const SEEN_KEY = 'wotd_seen';
 const CACHE_KEY = 'wotd_cache';
 
@@ -14,37 +16,15 @@ function hash(s: string): number {
   return Math.abs(h);
 }
 
-function loadSeen(): Set<string> {
-  try {
-    const raw = localStorage.getItem(SEEN_KEY);
-    return raw ? new Set(JSON.parse(raw)) : new Set();
-  } catch { return new Set(); }
-}
-
-function saveSeen(seen: Set<string>) {
-  try { localStorage.setItem(SEEN_KEY, JSON.stringify([...seen])); } catch {}
-}
-
-function loadCache(): Record<string, string> {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch { return {}; }
-}
-
-function saveCache(cache: Record<string, string>) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
-}
-
 export async function getWordOfTheDay(bypassCache = false): Promise<string> {
   const date = today();
-  const cache = loadCache();
+  const cache = read<Record<string, string>>(CACHE_KEY, {});
 
   if (!bypassCache && cache[date]) return cache[date];
 
   const res = await fetch('/api/slugs');
   const allSlugs: string[] = await res.json();
-  let seen = loadSeen();
+  let seen = read<Set<string>>(SEEN_KEY, new Set());
 
   let available = allSlugs.filter(s => !seen.has(s));
   if (available.length === 0) {
@@ -56,9 +36,9 @@ export async function getWordOfTheDay(bypassCache = false): Promise<string> {
   const picked = available[idx];
 
   seen.add(picked);
-  saveSeen(seen);
+  write(SEEN_KEY, [...seen]);
   cache[date] = picked;
-  saveCache(cache);
+  write(CACHE_KEY, cache);
 
   return picked;
 }

@@ -3,36 +3,13 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './SearchBar.module.scss';
 import { useEntry } from '../../lib/entry-context';
 import { isFavorite, toggleFavorite } from '../../lib/storage';
-import { expandAttrs } from '../../lib/abbrev';
+import { expandAbbr } from '../../lib/abbrev';
 
 interface SearchResult {
   slug: string;
   term: string;
   attributes: string[];
 }
-
-declare global {
-  interface Document {
-    __fjalorshqip__: string;
-  }
-}
-
-const random_string = () => {
-  return Math.random().toString(36).substring(2, 8);
-}
-
-const push_query = async (query: string) => {
-  try {
-    if (!document.__fjalorshqip__) {
-      document.__fjalorshqip__ = random_string();
-    }
-    if (typeof umami !== 'undefined' && umami?.track) {
-      umami.track('search_v2', {q: query, rs: document.__fjalorshqip__});
-    }
-  } catch (e) {
-    console.error('unexpected error', e);
-  }
-};
 
 const SearchBar = () => {
   const [query, setQuery] = useState(() => {
@@ -109,7 +86,6 @@ const SearchBar = () => {
       const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
       const data: SearchResult[] = await res.json();
       setSuggestions(data.slice(0, 10));
-      if (data.length > 0) push_query(q);
     } catch { setSuggestions([]); }
   }, []);
 
@@ -207,7 +183,7 @@ const SearchBar = () => {
             aria-selected={index === focusedIndex}
           >
             <span className={styles.term}>{suggestion.term}</span>
-            <span className={styles.attrs}>{expandAttrs(suggestion.attributes)}</span>
+            <span className={styles.attrs}>{suggestion.attributes.map(expandAbbr).join(', ')}</span>
           </Link>
         ))}
       </div>

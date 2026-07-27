@@ -41,6 +41,4 @@ export function expandAbbr(attr: string): string {
   return parts.map(p => MAP[p + '.'] || p + '.').join(' ');
 }
 
-export function expandAttrs(attrs: string[]): string {
-  return attrs.map(expandAbbr).join(', ');
-}
+

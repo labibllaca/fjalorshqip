@@ -14,14 +14,7 @@ export function getSlugSet(): Promise<Set<string>> {
   return loading.then(() => slugSet!);
 }
 
-export function wordToSlug(word: string): string {
-  return word
-    .toLowerCase()
-    .replace(/ë/g, 'ee')
-    .replace(/ç/g, 'cc')
-    .replace(/[^a-z0-9]/g, '')
-    .replace(/\s+/g, '-');
-}
+export { getSlug as wordToSlug } from './process';
 
 export function matchSlug(slug: string, slugs: Set<string>): string | undefined {
   if (slugs.has(slug)) return slug;

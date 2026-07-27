@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Reading Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Poppins','sans-serif'] },
+        colors: {
+          cream: '#eee7de',
+          panel: '#f6f2ea',
+          card: '#e7e0d2',
+          dark: '#2b2b2b',
+          muted: '#8a8378',
+          accent: '#d1493f',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Poppins', sans-serif; }
+  .scrollbar-hide::-webkit-scrollbar{display:none;}
+  input[type="text"] {
+    outline: none;
+    transition: box-shadow 0.2s;
+  }
+  input[type="text"]:focus {
+    box-shadow: 0 0 0 3px rgba(209, 73, 63, 0.15);
+  }
+</style>
+</head>
+<body class="bg-cream text-dark">
+
+<div class="flex flex-col lg:flex-row min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-20 hidden lg:flex flex-col items-center py-8 gap-8">
+    <div class="text-2xl">🐝</div>
+    <nav class="flex flex-col gap-4 mt-6">
+      <div class="w-11 h-11 rounded-2xl bg-accent text-white flex items-center justify-center shadow-md">🏠</div>
+      <div class="w-11 h-11 rounded-2xl text-muted flex items-center justify-center hover:bg-card cursor-pointer">📖</div>
+      <div class="w-11 h-11 rounded-2xl text-muted flex items-center justify-center hover:bg-card cursor-pointer">⏱️</div>
+      <div class="w-11 h-11 rounded-2xl text-muted flex items-center justify-center hover:bg-card cursor-pointer">🔖</div>
+      <div class="w-11 h-11 rounded-2xl text-muted flex items-center justify-center hover:bg-card cursor-pointer">⚙️</div>
+    </nav>
+    <div class="mt-auto w-11 h-11 rounded-2xl text-muted flex items-center justify-center hover:bg-card cursor-pointer">☰</div>
+  </aside>
+
+  <!-- Left column -->
+  <main class="flex-1 px-4 sm:px-6 lg:px-10 py-8">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center bg-gradient-to-b from-panel to-transparent rounded-3xl px-6 sm:px-12 py-10 sm:py-14 -mx-4 sm:-mx-6 lg:-mx-10 mb-4">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">Sheno fjalen qe,<br>kerkon!</h1>
+        <div class="mt-8 max-w-xl mx-auto flex flex-col sm:flex-row items-center gap-3">
+          <input type="text" class="w-full sm:flex-1 rounded-full sm:rounded-r-none px-5 py-3.5 text-sm bg-white border-0 shadow-sm" placeholder="Fjalë për të kërkuar…">
+          <button class="w-full sm:w-auto bg-dark text-white px-7 py-3.5 rounded-full sm:rounded-l-none flex items-center justify-center gap-2 hover:bg-black transition shadow-md">
+            Kerko <span>↗</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-16">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-xl font-semibold">Popular Now</h2>
+          <span class="text-muted cursor-pointer hover:text-dark transition">•••</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-white/60 backdrop-blur rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer">
+            <img src="https://covers.openlibrary.org/b/id/8231856-M.jpg" class="rounded-lg aspect-[2/3] w-full object-cover">
+            <p class="text-xs text-muted mt-2 leading-tight">Kënga e mjellmës</p>
+          </div>
+          <div class="bg-white/60 backdrop-blur rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer">
+            <img src="https://covers.openlibrary.org/b/id/8231996-M.jpg" class="rounded-lg aspect-[2/3] w-full object-cover">
+            <p class="text-xs text-muted mt-2 leading-tight">Ëndrra e arkitektit</p>
+          </div>
+          <div class="bg-white/60 backdrop-blur rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer">
+            <img src="https://covers.openlibrary.org/b/id/8232028-M.jpg" class="rounded-lg aspect-[2/3] w-full object-cover">
+            <p class="text-xs text-muted mt-2 leading-tight">Shiu i vjeshtës</p>
+          </div>
+          <div class="bg-white/60 backdrop-blur rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer">
+            <img src="https://covers.openlibrary.org/b/id/8232111-M.jpg" class="rounded-lg aspect-[2/3] w-full object-cover">
+            <p class="text-xs text-muted mt-2 leading-tight">Ura e gurit</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold">New Series Collection</h2>
+          <span class="text-muted cursor-pointer hover:text-dark transition">•••</span>
+        </div>
+        <div class="flex items-center gap-4 bg-white/60 backdrop-blur rounded-2xl p-4 shadow-sm">
+          <img src="https://covers.openlibrary.org/b/id/8232111-M.jpg" class="w-16 rounded-lg">
+          <div class="flex-1">
+            <h4 class="text-sm font-medium">A Legend of Ice and Fire: The Ice Horse</h4>
+            <span class="text-xs text-muted">8 chapters each vol</span>
+          </div>
+          <div class="text-xs text-muted font-medium">2 vol</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Right column -->
+  <aside class="w-full lg:w-[420px] px-4 sm:px-6 lg:px-10 py-8 border-t lg:border-t-0 lg:border-l border-black/5">
+    <div class="mt-14">
+      <h2 class="text-2xl font-semibold">Inhaltsverzeichnis</h2>
+      <div class="mt-4 space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-black/5">
+          <span class="text-sm">Kapitulli 1: Mëngjesi i parë</span>
+          <span class="text-xs text-muted">3</span>
+        </div>
+        <div class="flex items-center justify-between pb-2 border-b border-black/5">
+          <span class="text-sm">Kapitulli 2: Udhëtimi fillon</span>
+          <span class="text-xs text-muted">15</span>
+        </div>
+        <div class="flex items-center justify-between pb-2 border-b border-black/5">
+          <span class="text-sm">Kapitulli 3: Sekreti i pyllit</span>
+          <span class="text-xs text-muted">28</span>
+        </div>
+        <div class="flex items-center justify-between pb-2 border-b border-black/5">
+          <span class="text-sm">Kapitulli 4: Takimi i papritur</span>
+          <span class="text-xs text-muted">42</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm">Kapitulli 5: Fundi i rrugës</span>
+          <span class="text-xs text-muted">57</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <h3 class="font-semibold mb-4">Heute ist</h3>
+      <div class="bg-panel rounded-2xl p-6 text-center">
+        <div class="text-5xl sm:text-6xl font-bold text-dark leading-none">25</div>
+        <div class="text-base sm:text-lg font-semibold text-accent mt-2">Samstag</div>
+        <div class="text-sm text-muted mt-1">Juli 2026</div>
+      </div>
+    </div>
+
+
+  </aside>
+
+</div>
+</body>
+</html>
