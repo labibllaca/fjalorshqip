@@ -1,0 +1,7 @@
+services:
+  fjalor:
+    build: .
+    container_name: fjalor
+    restart: unless-stopped
+    ports:
+      - "5187:5187"
