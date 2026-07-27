@@ -21,8 +21,18 @@ function build() {
   const rawEntries: ScrapedEntry[] = JSON.parse(
     readFileSync(path.join(DATA_DIR, 'dictionary.json'), 'utf-8')
   );
-
   console.log(`Read ${rawEntries.length} raw entries`);
+
+  const instrumentsPath = path.join(DATA_DIR, 'albanian_instruments.json');
+  if (existsSync(instrumentsPath)) {
+    const rawInstruments: { name: string; description: string }[] = JSON.parse(
+      readFileSync(instrumentsPath, 'utf-8')
+    );
+    for (const inst of rawInstruments) {
+      rawEntries.push({ term: inst.name, definition: [inst.description] });
+    }
+    console.log(`Merged ${rawInstruments.length} instrument entries`);
+  }
 
   const db = new Database(DB_PATH);
 
