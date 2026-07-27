@@ -13,15 +13,46 @@ function shuffle(s: string): string {
   return a.join('');
 }
 
+function isLetter(c: string): boolean {
+  return /[a-zA-ZëËçÇ]/.test(c);
+}
+
+function findWordStart(str: string, pos: number): number {
+  while (pos > 0 && isLetter(str[pos - 1])) pos--;
+  return pos;
+}
+
+function findWordEnd(str: string, pos: number): number {
+  while (pos < str.length && isLetter(str[pos])) pos++;
+  return pos;
+}
+
 function blurDef(def: string, term: string): (string | { t: string; blurred: boolean })[] {
   const normDef = foldDiacritic(def);
   const normTerm = foldDiacritic(term);
-  const idx = normDef.indexOf(normTerm);
-  if (idx === -1) return [def];
+  const termIdx = normDef.indexOf(normTerm);
+
+  const capsRe = /\b[A-ZËÇ][A-ZËÇ]+\b/g;
+  const capsMatch = capsRe.exec(def);
+  const capsIdx = capsMatch ? capsMatch.index : -1;
+
+  if (termIdx === -1 && capsIdx === -1) return [def];
+
+  if (capsIdx !== -1 && (termIdx === -1 || capsIdx <= termIdx)) {
+    const word = capsMatch![0];
+    return [
+      def.slice(0, capsIdx),
+      { t: word, blurred: true },
+      ...blurDef(def.slice(capsIdx + word.length), term),
+    ];
+  }
+
+  const wordStart = findWordStart(def, termIdx);
+  const wordEnd = findWordEnd(def, termIdx + term.length);
   return [
-    def.slice(0, idx),
-    { t: def.slice(idx, idx + term.length), blurred: true },
-    ...blurDef(def.slice(idx + term.length), term),
+    def.slice(0, wordStart),
+    { t: def.slice(wordStart, wordEnd), blurred: true },
+    ...blurDef(def.slice(wordEnd), term),
   ];
 }
 
