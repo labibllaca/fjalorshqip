@@ -30,7 +30,7 @@ const WordOfTheDay = () => {
         .then(r => r.json())
         .then((data: Entry[]) => {
           if (cancelled) return;
-          const e = data[0] ?? null;
+          const e = Array.isArray(data) ? data.find(d => d.definitions?.length) ?? null : null;
           if (e?.definitions?.length) {
             setEntry(e);
             setCtxEntry(e);

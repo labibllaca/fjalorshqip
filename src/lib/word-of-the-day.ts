@@ -24,19 +24,19 @@ export async function getWordOfTheDay(bypassCache = false): Promise<string> {
 
   const res = await fetch('/api/slugs');
   const allSlugs: string[] = await res.json();
-  let seen = read<Set<string>>(SEEN_KEY, new Set());
+  let seen = read<string[]>(SEEN_KEY, []);
 
-  let available = allSlugs.filter(s => !seen.has(s));
+  let available = allSlugs.filter(s => !seen.includes(s));
   if (available.length === 0) {
-    seen = new Set();
+    seen = [];
     available = allSlugs;
   }
 
   const idx = hash(date) % available.length;
   const picked = available[idx];
 
-  seen.add(picked);
-  write(SEEN_KEY, [...seen]);
+  seen.push(picked);
+  write(SEEN_KEY, seen);
   cache[date] = picked;
   write(CACHE_KEY, cache);
 
